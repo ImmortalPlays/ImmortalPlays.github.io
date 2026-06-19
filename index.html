@@ -13,13 +13,9 @@
       color: #f1f5f9;
       line-height: 1.6;
       min-height: 100vh;
-      /* Calm, static dark base. The MOTION now comes from the dots on the
-         canvas below, not from the background color. */
       background: radial-gradient(circle at 50% 0%, #131c38 0%, #0a1024 60%, #070a18 100%);
     }
 
-    /* The animated dot-wave lives on this canvas, pinned behind everything.
-       pointer-events:none so it never blocks clicks. */
     #waves {
       position: fixed;
       inset: 0;
@@ -80,7 +76,6 @@
 </head>
 <body>
 
-  <!-- The animated particle wave is drawn here -->
   <canvas id="waves"></canvas>
 
   <header>
@@ -139,10 +134,11 @@
     <div class="wrap">© 2026 David Manson · Built with care.</div>
   </footer>
 
-  <!-- THE ANIMATED DOT-WAVE
-       We draw a grid of dots and gently push each one up/down using layered
-       sine waves that move over time. The result is a slow, flowing ripple —
-       subtle enough to stay in the background. -->
+  <!-- THE ANIMATED DOT-WAVE (irregular + mouse swell)
+       Each dot is lifted by SEVERAL overlapping waves at different speeds and
+       angles, so the pattern never neatly repeats (the "irregular" look).
+       On top of that, dots near the cursor get pushed up and brightened,
+       creating a swell that follows the mouse. -->
   <script>
     const canvas = document.getElementById('waves');
     const ctx = canvas.getContext('2d');
@@ -155,24 +151,54 @@
     resize();
     window.addEventListener('resize', resize);
 
-    const GAP = 30;   // spacing between dots — bigger = sparser
+    // Mouse tracking. We keep a "target" and a "smoothed" position so the
+    // swell glides instead of jumping.
+    let targetX = -9999, targetY = -9999;   // offscreen until the mouse moves
+    let mouseX = -9999, mouseY = -9999;
+    window.addEventListener('mousemove', (e) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+    });
+    window.addEventListener('mouseleave', () => {
+      targetX = -9999; targetY = -9999;     // swell fades out when cursor leaves
+    });
+
+    const GAP = 30;            // dot spacing
+    const SWELL_RADIUS = 170;  // how wide the mouse bump is
+    const SWELL_HEIGHT = 26;   // how strongly dots rise toward the cursor
 
     function draw(now) {
-      const t = now * 0.0006;   // controls overall speed (smaller = slower)
+      const t = now * 0.0006;
+
+      // Ease the smoothed mouse position toward the target
+      mouseX += (targetX - mouseX) * 0.08;
+      mouseY += (targetY - mouseY) * 0.08;
+
       ctx.clearRect(0, 0, w, h);
 
       for (let x = 0; x <= w + GAP; x += GAP) {
         for (let y = 0; y <= h + GAP; y += GAP) {
-          // Layered waves create an organic, non-repeating ripple
+          // Five layers at mismatched frequencies/angles -> irregular ripple
           const wave =
             Math.sin(x * 0.012 + t) +
-            Math.cos(y * 0.012 + t * 0.8) +
-            Math.sin((x + y) * 0.008 + t * 1.3);
+            Math.cos(y * 0.014 + t * 0.8) +
+            Math.sin((x + y) * 0.007 + t * 1.3) +
+            Math.sin((x - y) * 0.009 + t * 0.5) +
+            0.7 * Math.sin(x * 0.025 + y * 0.018 + t * 1.9);
 
-          const lift = wave * 6;                       // vertical ripple
-          const n = (wave + 3) / 6;                    // 0..1 brightness factor
-          const alpha = 0.06 + n * 0.20;               // kept faint on purpose
-          const size = 1 + n * 1.2;
+          const amp = 4.7;                       // ~max total of the layers
+          let n = (wave + amp) / (2 * amp);      // normalize to 0..1
+          let lift = wave * 6;
+
+          // Mouse swell: a soft bump that fades with distance from the cursor
+          const dx = x - mouseX;
+          const dy = y - mouseY;
+          const influence = Math.exp(-(dx * dx + dy * dy) / (2 * SWELL_RADIUS * SWELL_RADIUS));
+          lift -= influence * SWELL_HEIGHT;      // rise up toward the mouse
+          n += influence * 0.5;                  // and brighten
+
+          const alpha = Math.min(0.06 + n * 0.20, 0.5);
+          const size = 1 + n * 1.4;
 
           ctx.beginPath();
           ctx.arc(x, y + lift, size, 0, Math.PI * 2);
