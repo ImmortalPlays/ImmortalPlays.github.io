@@ -135,10 +135,10 @@
   </footer>
 
   <!-- 3D PERSPECTIVE WAVE SURFACE
-       Dots sit on a plane that recedes toward a horizon. Interactive elements
-       (buttons + cards) are treated as solid obstacles: any dot that lands
-       inside one (plus a small gap) is removed, and dots near the edges are
-       pushed away — more strongly while the element is hovered. -->
+       Dots sit on a plane that recedes toward a horizon. Buttons + cards are
+       obstacles the wave flows AROUND: a dot that would fall inside one is
+       pushed straight out to the element's edge (no blank holes), and dots
+       just outside bend away from the edges — more strongly while hovered. -->
   <script>
     const canvas = document.getElementById('waves');
     const ctx = canvas.getContext('2d');
@@ -157,8 +157,8 @@
     window.addEventListener('mousemove', (e) => { targetX = e.clientX; targetY = e.clientY; });
     window.addEventListener('mouseleave', () => { targetX = -9999; targetY = -9999; });
 
-    // OBSTACLES: every button and card. Dots can't enter them, and they shove
-    // nearby dots outward (extra push while hovered, eased via `hover`).
+    // OBSTACLES: every button and card. The wave flows around them; they shove
+    // harder while hovered (eased via `hover`).
     const obstacles = Array.from(document.querySelectorAll('.btn, .card')).map((el) => ({ el, target: 0, hover: 0 }));
     obstacles.forEach((o) => {
       o.el.addEventListener('mouseenter', () => { o.target = 1; });
@@ -169,8 +169,8 @@
     const ROWS = 56;
     const SWELL_RADIUS = 95;
     const SWELL_HEIGHT = 60;
-    const GAP = 7;       // clear gap kept around every obstacle
-    const BAND = 60;     // distance over which dots get pushed away from an edge
+    const GAP = 8;       // clear margin kept around every obstacle
+    const BAND = 55;     // how far outside the edge dots start bending away
 
     function draw(now) {
       const t = now * 0.0006;
@@ -184,7 +184,14 @@
         o.hover += (o.target - o.hover) * 0.12;
         const r = o.el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > h || r.right < 0 || r.left > w) continue;  // offscreen
-        rects.push({ l: r.left, t: r.top, r: r.right, b: r.bottom, hover: o.hover });
+        rects.push({
+          cx: (r.left + r.right) / 2,
+          cy: (r.top + r.bottom) / 2,
+          hw: (r.right - r.left) / 2 + GAP,   // half-width incl. gap
+          hh: (r.bottom - r.top) / 2 + GAP,   // half-height incl. gap
+          l: r.left, t: r.top, r: r.right, b: r.bottom,
+          hover: o.hover,
+        });
       }
 
       ctx.clearRect(0, 0, w, h);
@@ -227,26 +234,39 @@
 
           let size = (0.4 + frac * 1.7) * (0.8 + n * 0.5) + infl * 1.2;
 
-          // Obstacles: remove dots inside, push the rest away from the edges
-          let hidden = false;
+          // Obstacles: route the wave AROUND each button/card
           for (const R of rects) {
-            // Nearest point on the rectangle to this dot
-            const px = Math.min(Math.max(sx, R.l), R.r);
-            const py = Math.min(Math.max(sy, R.t), R.b);
-            const ex = sx - px, ey = sy - py;
-            const dist = Math.sqrt(ex * ex + ey * ey);
+            const rx = sx - R.cx, ry = sy - R.cy;
+            const insideX = Math.abs(rx) < R.hw;
+            const insideY = Math.abs(ry) < R.hh;
 
-            if (dist <= GAP) { hidden = true; break; }   // inside or touching -> drop it
-
-            if (dist < BAND + GAP) {
-              const f = 1 - (dist - GAP) / BAND;                 // 0..1, strongest near edge
-              const push = f * (12 + R.hover * 30);
-              sx += (ex / dist) * push;
-              sy += (ey / dist) * push;
-              alpha = Math.min(0.7, alpha + f * (0.10 + R.hover * 0.22));
+            if (insideX && insideY) {
+              // Dot is inside the padded box -> push it straight out to the
+              // nearest edge along the shortest axis, so it joins the flow
+              // wrapping around the element instead of disappearing.
+              const overX = R.hw - Math.abs(rx);   // how far past each edge
+              const overY = R.hh - Math.abs(ry);
+              if (overX < overY) {
+                sx = R.cx + Math.sign(rx || 1) * R.hw;
+              } else {
+                sy = R.cy + Math.sign(ry || 1) * R.hh;
+              }
+              alpha = Math.min(0.7, alpha + 0.06 + R.hover * 0.18);
+            } else {
+              // Dot is outside: bend it away from the nearest edge
+              const px = Math.min(Math.max(sx, R.l), R.r);
+              const py = Math.min(Math.max(sy, R.t), R.b);
+              const ex = sx - px, ey = sy - py;
+              const dist = Math.sqrt(ex * ex + ey * ey);
+              if (dist > 0 && dist < BAND) {
+                const f = 1 - dist / BAND;
+                const push = f * (10 + R.hover * 28);
+                sx += (ex / dist) * push;
+                sy += (ey / dist) * push;
+                alpha = Math.min(0.7, alpha + f * (0.08 + R.hover * 0.2));
+              }
             }
           }
-          if (hidden) continue;
 
           ctx.beginPath();
           ctx.arc(sx, sy, size, 0, Math.PI * 2);
