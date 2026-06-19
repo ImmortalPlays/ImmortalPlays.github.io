@@ -12,8 +12,10 @@
       --bg2: #1e1b4b;
       --bg3: #312e81;
       --bg4: #4c1d95;
-      /* These two get updated by JavaScript as the mouse moves: */
-      --mx: 50%;
+      /* Updated by JavaScript as the mouse moves: */
+      --bgx: 50%;   /* gradient pan position */
+      --bgy: 50%;
+      --mx: 50%;    /* glow position */
       --my: 50%;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,38 +26,29 @@
       line-height: 1.6;
       min-height: 100vh;
 
-      /* ANIMATED GRADIENT:
-         A big 4-color gradient that's much larger than the screen (400%),
-         then we slide it around with the @keyframes below. */
+      /* The gradient is much bigger than the screen (400%), and its
+         position is driven by the cursor via --bgx / --bgy below.
+         Move the mouse -> the gradient pans. The transition makes it
+         glide smoothly instead of snapping. */
       background: linear-gradient(125deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
-      background-size: 400% 400%;
-      animation: driftGradient 18s ease infinite;
+      background-size: 300% 300%;
+      background-position: var(--bgx) var(--bgy);
+      transition: background-position 0.25s ease-out;
     }
 
-    @keyframes driftGradient {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* MOUSE-FOLLOWING GLOW:
-       A full-screen layer with a soft radial light centered on the cursor.
-       --mx / --my are set by JavaScript. pointer-events:none so it never
-       blocks clicks. */
+    /* Mouse-following glow (a soft light centered on the cursor) */
     .glow {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
       background: radial-gradient(
-        circle 400px at var(--mx) var(--my),
-        rgba(139, 92, 246, 0.35),
+        circle 420px at var(--mx) var(--my),
+        rgba(139, 92, 246, 0.30),
         transparent 70%
       );
-      transition: background 0.1s ease;
     }
 
-    /* Keep all real content above the glow layer */
     header, .hero, section, footer { position: relative; z-index: 1; }
 
     .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
@@ -69,7 +62,6 @@
     .hero { padding: 90px 0 70px; text-align: center; }
     .hero h1 {
       font-size: 2.8rem; line-height: 1.15; margin-bottom: 16px;
-      /* Gradient-colored text */
       background: linear-gradient(90deg, #c4b5fd, #f0abfc, #93c5fd);
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -88,7 +80,6 @@
     section h2 { font-size: 1.7rem; margin-bottom: 14px; }
 
     .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-    /* "Glass" cards — semi-transparent with a blur, so the gradient shows through */
     .card {
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -110,7 +101,6 @@
 </head>
 <body>
 
-  <!-- The mouse-following glow layer -->
   <div class="glow" id="glow"></div>
 
   <header>
@@ -170,13 +160,18 @@
   </footer>
 
   <!-- THE DYNAMIC PART:
-       This tiny script listens for mouse movement and updates --mx / --my,
-       which moves the glow above. That's the whole trick. -->
+       Convert the cursor's position into percentages (0%-100% across the
+       screen), then feed those into the gradient pan (--bgx/--bgy) and the
+       glow (--mx/--my). Move the mouse -> the whole background reacts. -->
   <script>
-    const glow = document.getElementById('glow');
     window.addEventListener('mousemove', (e) => {
-      glow.style.setProperty('--mx', e.clientX + 'px');
-      glow.style.setProperty('--my', e.clientY + 'px');
+      const px = (e.clientX / window.innerWidth) * 100;
+      const py = (e.clientY / window.innerHeight) * 100;
+      const root = document.documentElement.style;
+      root.setProperty('--bgx', px + '%');
+      root.setProperty('--bgy', py + '%');
+      root.setProperty('--mx', e.clientX + 'px');
+      root.setProperty('--my', e.clientY + 'px');
     });
   </script>
 
