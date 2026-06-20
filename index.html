@@ -83,6 +83,8 @@
     .contact-form input:focus, .contact-form textarea:focus { outline: 2px solid #8b5cf6; border-color: #8b5cf6; }
     .contact-form .btn { justify-self: start; }
     .form-note { color: #c4b5fd; font-weight: 600; display: none; }
+    .contact-fallback { margin-top: 14px; color: #94a3b8; font-size: 0.95rem; }
+    .contact-fallback a { color: #c4b5fd; }
 
     footer { padding: 40px 0; text-align: center; color: #94a3b8; }
 
@@ -154,14 +156,16 @@
   <section id="contact">
     <div class="wrap">
       <h2>Get in touch</h2>
-      <p>Have a project in mind? Fill this out and it'll open in your email, ready to send.</p>
+      <p>Have a project in mind? Fill this out and I'll open it in Gmail, ready to send.</p>
       <form id="contactForm" class="contact-form">
         <input id="cName" placeholder="Your name" required />
         <input id="cEmail" type="email" placeholder="Your email" required />
         <textarea id="cMsg" rows="4" placeholder="Tell me a bit about your project…" required></textarea>
-        <button type="submit" class="btn">Send message</button>
-        <p class="form-note" id="cNote">✅ Opening your email app with your message ready to send…</p>
+        <button type="submit" class="btn">Send via Gmail</button>
+        <p class="form-note" id="cNote">✅ Opening Gmail in a new tab with your message ready to send…</p>
       </form>
+      <p class="contact-fallback">Don't use Gmail? Email me directly at
+        <a href="mailto:davidh.manson@gmail.com">davidh.manson@gmail.com</a></p>
     </div>
   </section>
 
@@ -181,19 +185,19 @@
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
     navLinks.addEventListener('click', (e) => { if (e.target.tagName === 'A') navLinks.classList.remove('open'); });
 
-    // Contact form -> opens the visitor's email app with everything pre-filled,
-    // addressed to David. Their message arrives FROM their own email, so David
-    // can just reply.
+    // Contact form -> opens a Gmail compose window (in a new tab) pre-filled.
+    // Non-Gmail visitors can use the "email me directly" link below the form.
     const contactForm = document.getElementById('contactForm');
     contactForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('cName').value.trim();
       const email = document.getElementById('cEmail').value.trim();
       const msg = document.getElementById('cMsg').value.trim();
-      const subject = encodeURIComponent('Website inquiry from ' + name);
+      const su = encodeURIComponent('Website inquiry from ' + name);
       const body = encodeURIComponent(msg + '\n\n— ' + name + ' (' + email + ')');
+      const gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=davidh.manson@gmail.com&su=' + su + '&body=' + body;
+      window.open(gmailUrl, '_blank');
       document.getElementById('cNote').style.display = 'block';
-      window.location.href = 'mailto:davidh.manson@gmail.com?subject=' + subject + '&body=' + body;
     });
 
     const canvas = document.getElementById('waves');
