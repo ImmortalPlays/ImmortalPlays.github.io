@@ -25,6 +25,7 @@
     }
 
     header, .hero, section, footer { position: relative; z-index: 1; }
+    header { z-index: 50; }   /* keep the mobile menu above the hero */
 
     .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
 
@@ -33,6 +34,10 @@
     .logo { font-weight: 700; font-size: 1.2rem; }
     nav a { color: #cbd5e1; text-decoration: none; margin-left: 20px; }
     nav a:hover { color: #fff; }
+
+    /* Hamburger button — hidden on desktop, shown on phones */
+    .menu-toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+    .menu-toggle span { display: block; width: 24px; height: 2px; background: #cbd5e1; margin: 5px 0; border-radius: 2px; }
 
     .hero { padding: 90px 0 70px; text-align: center; }
     .hero h1 {
@@ -68,7 +73,17 @@
 
     footer { padding: 40px 0; text-align: center; color: #94a3b8; }
 
+    /* ===== MOBILE (screens 640px wide or less) ===== */
     @media (max-width: 640px) {
+      #waves { display: none; }            /* no animated dots on phones */
+      .menu-toggle { display: block; }     /* show the hamburger */
+      .nav-links {
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: #0b1226; border-top: 1px solid rgba(255,255,255,0.12);
+        display: none; flex-direction: column; align-items: stretch; padding: 6px 0;
+      }
+      .nav-links.open { display: flex; }   /* opened by tapping the hamburger */
+      .nav-links a { margin-left: 0; padding: 12px 24px; }
       .cards { grid-template-columns: 1fr; }
       .hero h1 { font-size: 2.1rem; }
     }
@@ -82,11 +97,12 @@
     <div class="wrap">
       <nav>
         <span class="logo">David Manson</span>
-        <div>
+        <div class="nav-links" id="navLinks">
           <a href="#work">Work</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
       </nav>
     </div>
   </header>
@@ -137,8 +153,15 @@
   <!-- 3D PERSPECTIVE WAVE SURFACE
        Dots sit on a plane that recedes toward a horizon. The wave passes
        behind the buttons and cards; while one is hovered it gives the nearby
-       dots a slight outward push (it moves, so it nudges the wave). -->
+       dots a slight outward push (it moves, so it nudges the wave).
+       On phones the dots are skipped entirely (see the mobile check below). -->
   <script>
+    // Mobile hamburger menu
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.addEventListener('click', (e) => { if (e.target.tagName === 'A') navLinks.classList.remove('open'); });
+
     const canvas = document.getElementById('waves');
     const ctx = canvas.getContext('2d');
 
@@ -249,7 +272,12 @@
       }
       requestAnimationFrame(draw);
     }
-    requestAnimationFrame(draw);
+
+    // Only run the dots animation on larger screens — skip it on phones
+    // (saves battery, and the canvas is hidden on mobile anyway).
+    if (!window.matchMedia('(max-width: 640px)').matches) {
+      requestAnimationFrame(draw);
+    }
   </script>
 
 </body>
