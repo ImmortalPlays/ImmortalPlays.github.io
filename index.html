@@ -57,6 +57,7 @@
   #rainLoader {
     position:fixed; inset:0; z-index:9999; background:var(--paper);
     overflow:hidden; transition:opacity .05s linear; will-change:opacity, transform;
+    touch-action:none; /* let finger drags wipe the glass instead of scrolling */
   }
   #rainCanvas { position:absolute; inset:0; display:block; width:100%; height:100%; }
   #rainHint {
@@ -260,7 +261,7 @@
   <!-- Rainy frosted-glass loading screen -->
   <div id="rainLoader" aria-hidden="true">
     <canvas id="rainCanvas"></canvas>
-    <div id="rainHint"><span class="hdot"></span>Wipe the glass</div>
+    <div id="rainHint"><span class="hdot"></span>Wipe the glass · tap to skip</div>
   </div>
 
   <!-- Abstract brand shapes -->
@@ -532,8 +533,9 @@
   /* ---------- Rainy frosted-glass loading screen (vanilla WebGL) ----------
      Ported from the React/WebGL artifact. A paper-and-cobalt wordmark sits
      behind frosted glass with falling rain, split across parallax planes.
-     Move the cursor to wipe the glass clear; the fog lifts, holds, then a
-     fast swipe-down curtain drops away to reveal the site. Falls back to an
+     Move the cursor (or drag a finger) to wipe the glass clear; the fog lifts,
+     holds, then a fast swipe-down curtain drops away to reveal the site.
+     A quick tap/click anywhere skips straight to that reveal. Falls back to an
      instant reveal with no WebGL / reduced motion. */
   (function rainLoader() {
     // LAYER_MODE controls how the title is split into depth planes that move
@@ -578,6 +580,8 @@
             : /* depth */              { l1: 1.0,  l2: 0.0 };
 
     var povX = 0, povY = 0, targetPovX = 0, targetPovY = 0, lastPx = -9999, lastPy = -9999;
+    // tap-to-skip bookkeeping: a press that barely moves and lifts quickly = tap.
+    var skipped = false, pdownX = 0, pdownY = 0, pdownT = 0, pmoved = false;
     window.__dmLoader = { setPar: function(v){ MAXOFF = v; } }; // live parallax hook for the tweak panel
     var start = performance.now(), raf = null;
     var dpr, cssW, cssH, W, H, clearW, clearH, clearCv;
@@ -809,8 +813,29 @@
     function easeInOut(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
     function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
+    // Jump straight to the swipe-down reveal (tap/click to skip the rain).
+    function skip() {
+      if (skipped) return;
+      skipped = true;
+      if (hint) hint.style.opacity = "0";
+      var elapsed = (performance.now() - start) / 1000;
+      if (elapsed < TRANS_START) { start = performance.now() - TRANS_START * 1000; }
+    }
+    function onDown(e) {
+      pdownX = e.clientX; pdownY = e.clientY; pdownT = performance.now(); pmoved = false;
+      lastPx = -9999; lastPy = -9999; // begin a fresh wipe stroke (important for touch)
+    }
+    function onUp(e) {
+      var dx = e.clientX - pdownX, dy = e.clientY - pdownY;
+      if (!pmoved && (dx * dx + dy * dy) < 100 && performance.now() - pdownT < 450) skip();
+    }
+
     function handleMove(e) {
       var px = e.clientX, py = e.clientY;
+      if (pdownT) {
+        var mdx = px - pdownX, mdy = py - pdownY;
+        if (mdx * mdx + mdy * mdy > 100) pmoved = true; // a real drag, not a tap
+      }
       targetPovX = (px / cssW - 0.5) * 2 * MAXOFF;
       targetPovY = (py / cssH - 0.5) * 2 * MAXOFF;
       if (clearCv && lastPx > -9000) {
@@ -903,6 +928,9 @@
     window.addEventListener("resize", build);
     window.addEventListener("pointermove", handleMove);
     window.addEventListener("pointerleave", function () { targetPovX = 0; targetPovY = 0; lastPx = -9999; lastPy = -9999; });
+    // tap / click anywhere on the overlay to skip the intro
+    overlay.addEventListener("pointerdown", onDown);
+    overlay.addEventListener("pointerup", onUp);
     raf = requestAnimationFrame(loop);
   })();
 
