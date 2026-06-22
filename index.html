@@ -4,87 +4,105 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>David Manson — Freelance Web Design</title>
-<meta name="description" content="David Manson builds simple, affordable websites for clubs, nonprofits, and small teams.">
+<meta name="description" content="David Manson designs clear, affordable websites for clubs, nonprofits, and small teams.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Canvas / ink */
-    --navy-700:#131c38; --navy-800:#0b1226; --navy-850:#0a1024; --navy-900:#060912;
-    /* Text ramp */
-    --slate-50:#f1f5f9; --slate-300:#cbd5e1; --slate-400:#94a3b8; --slate-450:#8b9ab0;
-    /* Accent */
-    --teal-400:#2dd4bf; --teal-300:#5eead4; --blue-500:#3b82f6; --blue-400:#60a5fa; --indigo-300:#a5b4fc;
-    /* Glass */
-    --glass-fill:rgba(255,255,255,0.04); --glass-border:rgba(255,255,255,0.10);
-    --glass-border-strong:rgba(255,255,255,0.14); --glass-border-hover:rgba(96,165,250,0.55);
-    /* Semantic */
-    --text-strong:var(--slate-50); --text-body:var(--slate-300); --text-muted:var(--slate-400);
-    --text-placeholder:var(--slate-450); --text-link:var(--blue-400);
+    /* Paper / ink */
+    --paper:#f4f1ea; --paper-2:#ece7db; --white:#ffffff;
+    --ink:#17181d; --ink-soft:#474a54; --ink-mute:#7b7e89;
+    --line:#ddd6c7; --line-soft:rgba(23,24,29,0.08);
+    /* Blue accent (flat, purposeful) */
+    --blue:#1f4fd8; --blue-deep:#173bb0; --blue-700:#1a3aa8;
+    --blue-tint:#e6ebfc; --blue-tint-2:#d4ddf8;
+    /* Warm secondary — used only in abstract shapes for layering depth */
+    --sand:#e0a96b;
     /* Type */
-    --font-sans: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    --leading-body:1.6;
+    --font-display:"Space Grotesk", system-ui, -apple-system, sans-serif;
+    --font-sans:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --leading-body:1.62;
     /* Layout */
-    --content-max:880px; --form-max:460px;
-    --radius-md:10px; --radius-lg:14px;
+    --content-max:920px; --form-max:460px;
+    --radius-sm:8px; --radius-md:10px; --radius-lg:16px;
     /* Effects */
-    --shadow-accent:0 8px 24px rgba(59,130,246,0.38);
-    --shadow-accent-hover:0 12px 30px rgba(59,130,246,0.52);
-    /* Gradients */
-    --gradient-canvas:radial-gradient(circle at 50% 8%, var(--navy-700) 0%, var(--navy-850) 55%, var(--navy-900) 100%);
-    --gradient-accent:linear-gradient(90deg, var(--teal-400), var(--blue-500));
-    --gradient-home:linear-gradient(90deg,#2dd4bf,#3b82f6);
-    --gradient-work:linear-gradient(90deg,#3b82f6,#6366f1);
-    --gradient-about:linear-gradient(90deg,#6366f1,#06b6d4);
-    --gradient-contact:linear-gradient(90deg,#22d3ee,#2dd4bf);
+    --shadow-blue:0 10px 26px rgba(31,79,216,0.26);
+    --shadow-blue-hover:0 14px 32px rgba(31,79,216,0.34);
+    --shadow-soft:0 10px 34px rgba(23,24,29,0.08);
   }
 
   * { box-sizing:border-box; }
   html { margin:0; }
   body {
-    margin:0; min-height:100vh; background:var(--gradient-canvas);
-    color:var(--text-strong); font-family:var(--font-sans); line-height:var(--leading-body);
+    margin:0; min-height:100vh; background:var(--paper);
+    color:var(--ink); font-family:var(--font-sans); line-height:var(--leading-body);
   }
-  ::placeholder { color:var(--text-placeholder); }
+  ::placeholder { color:var(--ink-mute); }
   a { color:inherit; }
 
-  /* ---------- Background wave + scrims (Home only) ---------- */
-  #waveWrap { position:fixed; inset:0; z-index:0; pointer-events:none; display:none; }
-  #waveWrap.show { display:block; }
-  #wave { position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0.5; }
-  #waveWrap .scrim-l { position:absolute; inset:0; background:linear-gradient(90deg, rgba(6,9,18,0.82) 0%, rgba(6,9,18,0.45) 38%, transparent 72%); }
-  #waveWrap .scrim-v { position:absolute; inset:0; background:radial-gradient(120% 75% at 50% 36%, transparent 46%, rgba(6,9,18,0.6) 100%); }
+  /* ---------- Abstract brand shapes (fixed background) ---------- */
+  #shapes { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  #shapes svg { width:100%; height:100%; display:block; }
+  .drift { transform-box:fill-box; transform-origin:center; }
+  .drift-a { animation:driftA 26s ease-in-out infinite alternate; }
+  .drift-b { animation:driftB 32s ease-in-out infinite alternate; }
+  .drift-c { animation:driftC 22s ease-in-out infinite alternate; }
+  @keyframes driftA { from { transform:translate(0,0); } to { transform:translate(-26px,18px); } }
+  @keyframes driftB { from { transform:translate(0,0); } to { transform:translate(22px,-16px); } }
+  @keyframes driftC { from { transform:translate(0,0) rotate(0deg); } to { transform:translate(-14px,-12px) rotate(6deg); } }
+
+  /* ---------- Rainy frosted-glass loading screen ---------- */
+  #rainLoader {
+    position:fixed; inset:0; z-index:9999; background:var(--paper);
+    overflow:hidden; transition:opacity .05s linear; will-change:opacity;
+  }
+  #rainCanvas { position:absolute; inset:0; display:block; width:100%; height:100%; }
+  #rainHint {
+    position:absolute; left:0; right:0; bottom:46px; pointer-events:none;
+    display:flex; align-items:center; justify-content:center; gap:9px;
+    font-family:var(--font-display); font-size:0.72rem; font-weight:600;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--blue);
+    animation:hintPulse 2.4s ease-in-out infinite;
+  }
+  #rainHint .hdot { width:6px; height:6px; border-radius:50%; background:var(--blue); display:inline-block; }
+  @keyframes hintPulse { 0%,100% { opacity:0.35; } 50% { opacity:0.8; } }
+  body.loading { overflow:hidden; }
 
   .stage { position:relative; z-index:1; }
 
   /* ---------- Nav ---------- */
   nav { position:sticky; top:16px; z-index:50; padding:0 20px; margin-top:16px; }
   .nav-pill {
-    position:relative; max-width:940px; margin:0 auto; display:flex; align-items:center;
-    justify-content:space-between; gap:18px; padding:9px 14px 9px 20px;
-    background:rgba(13,20,40,0.55); border:1px solid var(--glass-border-strong);
+    position:relative; max-width:980px; margin:0 auto; display:flex; align-items:center;
+    justify-content:space-between; gap:18px; padding:10px 14px 10px 22px;
+    background:rgba(255,255,255,0.72); border:1px solid var(--line-soft);
     backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
-    border-radius:999px; box-shadow:0 10px 34px rgba(0,0,0,0.32);
+    border-radius:999px; box-shadow:var(--shadow-soft);
   }
   .brand {
-    font-weight:700; font-size:1.2rem; letter-spacing:-0.01em; text-decoration:none;
-    background-image:var(--gradient-home); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    font-family:var(--font-display); font-weight:700; font-size:1.15rem; letter-spacing:-0.01em;
+    text-decoration:none; color:var(--ink);
   }
-  .nav-links { display:flex; align-items:center; gap:4px; }
+  .brand .dot { color:var(--blue); }
+  .nav-links { display:flex; align-items:center; gap:2px; }
   .nav-links a {
-    position:relative; padding:8px 16px; border-radius:999px; color:var(--text-body);
-    font-size:0.95rem; font-weight:600; text-decoration:none; white-space:nowrap;
-    display:inline-flex; align-items:center; transition:color .18s ease, background .18s ease;
+    position:relative; padding:8px 16px; border-radius:999px; color:var(--ink-soft);
+    font-family:var(--font-display); font-size:0.92rem; font-weight:500; text-decoration:none;
+    white-space:nowrap; display:inline-flex; align-items:center;
+    transition:color .18s ease, background .18s ease;
   }
-  .nav-links a:hover { color:#fff; }
-  .nav-links a.active { color:#fff; }
+  .nav-links a:hover { color:var(--ink); }
+  .nav-links a.active { color:var(--ink); }
   .nav-links a.active::after {
-    content:""; position:absolute; left:16px; right:16px; bottom:2px; height:2px;
-    border-radius:2px; background:var(--gradient-accent);
+    content:""; position:absolute; left:16px; right:16px; bottom:3px; height:2px;
+    border-radius:2px; background:var(--blue);
   }
   .nav-toggle {
     display:none; align-items:center; justify-content:center; flex-direction:column; gap:5px;
     width:40px; height:40px; padding:0; background:none; border:0; cursor:pointer;
   }
-  .nav-toggle span { display:block; width:22px; height:2px; border-radius:2px; background:var(--text-body); }
+  .nav-toggle span { display:block; width:22px; height:2px; border-radius:2px; background:var(--ink); }
 
   /* ---------- Layout ---------- */
   main { max-width:var(--content-max); margin:0 auto; padding:0 24px; transition:opacity .26s ease, transform .26s ease; }
@@ -92,135 +110,170 @@
   .view.active { display:block; }
 
   .eyebrow {
-    display:inline-block; font-size:0.8rem; font-weight:600; letter-spacing:0.14em;
-    text-transform:uppercase; margin-bottom:18px;
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+    display:inline-flex; align-items:center; gap:12px; font-family:var(--font-display);
+    font-size:0.8rem; font-weight:600; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--blue); margin-bottom:20px;
   }
-  .eyebrow.home { margin-bottom:22px; background-image:var(--gradient-home); }
-  .eyebrow.work { background-image:var(--gradient-work); }
-  .eyebrow.about { background-image:var(--gradient-about); }
-  .eyebrow.contact { background-image:var(--gradient-contact); }
+  .eyebrow::before { content:""; width:26px; height:2px; background:var(--blue); border-radius:2px; }
 
-  h1 { font-weight:700; letter-spacing:-0.02em; color:var(--text-strong); margin:0; }
-  .hero-h1 { font-size:clamp(2.3rem,5.4vw,3.4rem); line-height:1.08; margin-bottom:22px; text-wrap:balance; }
-  .hero-h1 .grad { background-image:var(--gradient-home); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .page-h1 { font-size:clamp(2rem,4.4vw,2.6rem); line-height:1.12; }
+  h1 { font-family:var(--font-display); font-weight:700; letter-spacing:-0.025em; color:var(--ink); margin:0; }
+  .hero-h1 { font-size:clamp(2.4rem,5.6vw,3.6rem); line-height:1.05; margin-bottom:24px; text-wrap:balance; }
+  .hero-h1 .grad { color:var(--blue); }
+  .page-h1 { font-size:clamp(2rem,4.6vw,2.7rem); line-height:1.1; }
 
-  .lead { font-size:1.2rem; color:var(--text-body); line-height:var(--leading-body); margin:0; max-width:580px; }
-  .sub { margin:0 0 28px; color:var(--text-body); max-width:540px; line-height:1.55; }
+  .lead { font-size:1.18rem; color:var(--ink-soft); line-height:var(--leading-body); margin:0; max-width:600px; }
+  .sub { margin:0 0 30px; color:var(--ink-soft); max-width:560px; line-height:1.55; font-size:1.05rem; }
 
-  /* Buttons */
+  /* Buttons — flat cobalt */
   .btn {
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:12px 22px; border-radius:var(--radius-md); font-weight:600; font-size:1rem;
-    text-decoration:none; cursor:pointer; border:1px solid transparent;
-    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    padding:13px 24px; border-radius:var(--radius-md); font-family:var(--font-display);
+    font-weight:600; font-size:0.98rem; text-decoration:none; cursor:pointer;
+    border:1.5px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
   }
-  .btn-primary { background:var(--gradient-accent); color:#fff; box-shadow:var(--shadow-accent); }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:var(--shadow-accent-hover); }
-  .btn-secondary { background:var(--glass-fill); color:var(--text-strong); border-color:var(--glass-border-strong); }
-  .btn-secondary:hover { transform:translateY(-2px); border-color:var(--glass-border-hover); }
-  .btn-sm { padding:9px 18px; font-size:0.95rem; }
+  .btn-primary { background:var(--blue); color:#fff; box-shadow:var(--shadow-blue); }
+  .btn-primary:hover { transform:translateY(-2px); background:var(--blue-deep); box-shadow:var(--shadow-blue-hover); }
+  .btn-secondary { background:transparent; color:var(--ink); border-color:rgba(23,24,29,0.22); }
+  .btn-secondary:hover { transform:translateY(-2px); border-color:var(--blue); color:var(--blue); }
 
-  .cta-row { display:flex; gap:14px; margin-top:36px; flex-wrap:wrap; }
+  .cta-row { display:flex; gap:14px; margin-top:38px; flex-wrap:wrap; }
 
   /* Principles */
-  .principles { display:flex; gap:44px; margin-top:72px; flex-wrap:wrap; }
-  .principle { max-width:210px; }
-  .principle .t { color:var(--text-strong); font-weight:600; margin-bottom:6px; }
-  .principle .d { color:var(--text-muted); font-size:0.95rem; line-height:1.5; }
+  .principles { display:flex; gap:40px; margin-top:80px; flex-wrap:wrap; }
+  .principle { max-width:230px; }
+  .principle .idx { font-family:var(--font-display); font-weight:600; font-size:0.82rem; color:var(--blue); letter-spacing:0.08em; display:block; margin-bottom:14px; }
+  .principle .t { font-family:var(--font-display); color:var(--ink); font-weight:600; font-size:1.12rem; margin-bottom:8px; }
+  .principle .d { color:var(--ink-soft); font-size:0.96rem; line-height:1.55; }
 
   /* Work list */
-  .work-list { display:flex; flex-direction:column; border-top:1px solid var(--glass-border); }
+  .work-list { display:flex; flex-direction:column; border-top:1px solid var(--line); }
   .work-row {
     display:grid; grid-template-columns:1fr auto; gap:6px 24px; align-items:center;
-    padding:22px 18px; border-bottom:1px solid var(--glass-border); border-radius:var(--radius-lg);
+    padding:24px 18px; border-bottom:1px solid var(--line); border-radius:var(--radius-lg);
     transition:background .15s ease;
   }
-  .work-row:hover { background:var(--glass-fill); }
-  .work-head { display:flex; align-items:center; gap:10px; margin-bottom:7px; flex-wrap:wrap; }
-  .work-title { font-size:1.2rem; font-weight:600; color:var(--text-strong); }
+  .work-row:hover { background:rgba(31,79,216,0.045); }
+  .work-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+  .work-title { font-family:var(--font-display); font-size:1.18rem; font-weight:600; color:var(--ink); }
   .badge {
     display:inline-flex; align-items:center; padding:3px 11px; border-radius:999px;
-    font-size:0.78rem; font-weight:600; line-height:1.4; white-space:nowrap;
+    font-family:var(--font-display); font-size:0.74rem; font-weight:600; line-height:1.5;
+    letter-spacing:0.02em; white-space:nowrap;
   }
-  .badge-outline { background:transparent; border:1px solid var(--blue-400); color:var(--blue-400); }
-  .badge-glass { background:var(--glass-fill); border:1px solid var(--glass-border); color:var(--text-body); }
-  .work-desc { margin:0; color:var(--text-body); max-width:520px; line-height:1.55; }
+  .badge-outline { background:transparent; border:1px solid var(--blue); color:var(--blue); }
+  .badge-glass { background:var(--paper-2); border:1px solid var(--line); color:var(--ink-mute); }
+  .work-desc { margin:0; color:var(--ink-soft); max-width:540px; line-height:1.55; }
   .work-link {
-    display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-size:0.92rem;
-    font-weight:600; color:var(--text-link); text-decoration:none; transition:color .15s ease;
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap; font-family:var(--font-display);
+    font-size:0.92rem; font-weight:600; color:var(--blue); text-decoration:none; transition:color .15s ease;
   }
-  .work-link:hover { color:#fff; }
+  .work-link:hover { color:var(--blue-deep); }
   .work-link .arrow { display:inline-block; transition:transform .15s ease; }
   .work-link:hover .arrow { transform:translate(2px,-2px); }
-  .work-sample { font-size:0.85rem; color:var(--text-muted); }
-  .work-foot { margin:22px 0 0; color:var(--text-muted); font-size:0.95rem; }
-  .work-foot a, .sub a, .prose a, .contact-foot a { color:var(--text-link); }
+  .work-sample { font-size:0.85rem; color:var(--ink-mute); }
+  .work-foot { margin:24px 0 0; color:var(--ink-mute); font-size:0.95rem; }
+  .work-foot a, .sub a, .prose a, .contact-foot a { color:var(--blue); font-weight:500; }
 
   /* Prose / About */
-  .prose { max-width:620px; }
-  .prose p { color:var(--text-body); line-height:var(--leading-body); font-size:1.05rem; margin:0 0 20px; }
+  .prose { max-width:640px; border-left:2px solid var(--blue); padding-left:28px; }
+  .prose p { color:var(--ink-soft); line-height:1.7; font-size:1.08rem; margin:0 0 22px; }
+  .prose p strong { color:var(--ink); font-weight:600; }
   .prose p:last-child { margin-bottom:0; }
 
   /* Form */
   form.contact { display:grid; gap:14px; max-width:var(--form-max); }
   .field {
-    width:100%; padding:12px 14px; border-radius:var(--radius-md);
-    background:var(--glass-fill); border:1px solid var(--glass-border-strong);
-    color:var(--text-strong); font-family:inherit; font-size:1rem; line-height:1.5;
+    width:100%; padding:13px 15px; border-radius:var(--radius-md);
+    background:var(--white); border:1px solid var(--line);
+    color:var(--ink); font-family:inherit; font-size:1rem; line-height:1.5;
     transition:border-color .15s ease, box-shadow .15s ease;
   }
-  .field:focus { outline:none; border-color:var(--blue-500); box-shadow:0 0 0 2px rgba(59,130,246,0.45); }
+  .field:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(31,79,216,0.16); }
   textarea.field { resize:vertical; min-height:116px; }
-  .form-success { color:var(--teal-300); font-weight:600; margin:0; }
-  .contact-foot { margin:22px 0 0; color:var(--text-muted); font-size:0.95rem; }
+  .form-success { color:var(--blue-deep); font-weight:600; margin:0; }
+  .contact-foot { margin:24px 0 0; color:var(--ink-mute); font-size:0.95rem; }
 
   footer {
-    padding:48px 0 44px; text-align:center; color:var(--text-muted);
-    font-size:0.9rem; border-top:1px solid var(--glass-border); margin-top:8px;
+    padding:56px 0 48px; text-align:center; color:var(--ink-mute);
+    font-size:0.9rem; border-top:1px solid var(--line); margin-top:8px;
   }
 
   /* Sections */
-  .sec { padding:88px 0 80px; }
-  .sec.home { padding-bottom:96px; max-width:680px; }
+  .sec { padding:88px 0 88px; }
+  .sec.home { padding-bottom:104px; max-width:720px; }
   .sec.work { padding-bottom:64px; }
 
   /* ---------- Mobile ---------- */
   @media (max-width:640px) {
-    #waveWrap { display:none !important; }
+    #shapes { opacity:0.6; }
     .nav-toggle { display:inline-flex; }
     .nav-links {
       position:absolute; top:calc(100% + 10px); left:0; right:0;
       flex-direction:column; align-items:stretch;
-      background:var(--navy-800); border:1px solid rgba(255,255,255,0.12);
+      background:var(--white); border:1px solid var(--line-soft);
       border-radius:14px; padding:8px; gap:2px;
-      box-shadow:0 16px 44px rgba(0,0,0,0.5); display:none;
+      box-shadow:var(--shadow-soft); display:none;
     }
     .nav-links.open { display:flex; }
     .nav-links a { padding:12px 16px; border-radius:10px; }
     .nav-links a.active::after { display:none; }
-    .nav-links a.active { background:rgba(96,165,250,0.14); }
-    .principles { gap:28px; }
+    .nav-links a.active { background:var(--blue-tint); }
+    .principles { gap:30px; }
+    .prose { padding-left:20px; }
   }
 
   @media (prefers-reduced-motion:reduce) {
     .view { transition:none !important; }
+    .drift-a, .drift-b, .drift-c { animation:none !important; }
   }
 </style>
 </head>
-<body>
 
-  <div id="waveWrap" aria-hidden="true">
-    <canvas id="wave"></canvas>
-    <div class="scrim-l"></div>
-    <div class="scrim-v"></div>
+<body class="loading">
+
+  <!-- Rainy frosted-glass loading screen -->
+  <div id="rainLoader" aria-hidden="true">
+    <canvas id="rainCanvas"></canvas>
+    <div id="rainHint"><span class="hdot"></span>Wipe the glass</div>
+  </div>
+
+  <!-- Abstract brand shapes -->
+  <div id="shapes" aria-hidden="true">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dotgrid" width="26" height="26" patternUnits="userSpaceOnUse">
+          <circle cx="2.4" cy="2.4" r="2.2" fill="#1f4fd8" fill-opacity="0.26"></circle>
+        </pattern>
+      </defs>
+
+      <line x1="-60" y1="320" x2="760" y2="-60" stroke="#17181d" stroke-opacity="0.05" stroke-width="1"></line>
+
+      <g class="drift drift-a">
+        <circle cx="1296" cy="92" r="252" fill="none" stroke="#1f4fd8" stroke-opacity="0.16" stroke-width="1.5"></circle>
+        <circle cx="1296" cy="92" r="150" fill="#1f4fd8" fill-opacity="0.05"></circle>
+      </g>
+
+      <g class="drift drift-b">
+        <circle cx="118" cy="772" r="212" fill="#1f4fd8" fill-opacity="0.06"></circle>
+        <path d="M 56 486 A 226 226 0 0 1 470 426" fill="none" stroke="#1f4fd8" stroke-opacity="0.30" stroke-width="2"></path>
+      </g>
+
+      <g class="drift drift-c">
+        <rect x="1016" y="612" width="312" height="234" fill="url(#dotgrid)" transform="rotate(-8 1172 729)"></rect>
+        <circle cx="1150" cy="772" r="82" fill="#e0a96b" fill-opacity="0.16"></circle>
+      </g>
+
+      <circle cx="474" cy="172" r="7" fill="#1f4fd8"></circle>
+      <circle cx="902" cy="636" r="5" fill="#e0a96b"></circle>
+      <circle cx="690" cy="824" r="4" fill="#1f4fd8" fill-opacity="0.5"></circle>
+    </svg>
   </div>
 
   <div class="stage">
     <nav>
       <div class="nav-pill">
-        <a href="#home" class="brand">David Manson</a>
+        <a href="#home" class="brand">David Manson<span class="dot">.</span></a>
         <div class="nav-links" id="navLinks">
           <a href="#home" data-view="home">Home</a>
           <a href="#work" data-view="work">Work</a>
@@ -238,25 +291,28 @@
       <!-- HOME -->
       <section class="view" id="view-home">
         <div class="sec home">
-          <div class="eyebrow home">Freelance web design</div>
-          <h1 class="hero-h1">I build simple websites for <span class="grad">anyone who needs one.</span></h1>
-          <p class="lead">Hi, I'm David. I help clubs, nonprofits, and small teams get online with something clear, fast, and easy to keep up — and I do it without the big-agency bill. You talk to the person actually building your site, start to finish.</p>
+          <div class="eyebrow">Freelance web design</div>
+          <h1 class="hero-h1">Websites that feel like <span class="grad">the people behind them.</span></h1>
+          <p class="lead">Hi, I'm David. I help clubs, nonprofits, and small teams build an online home that's clear, fast, and easy to look after — without the big-agency price tag. From the first sketch to launch day, you work directly with the person building your site.</p>
           <div class="cta-row">
             <a href="#contact" class="btn btn-primary">Start a project</a>
             <a href="#work" class="btn btn-secondary">See the work</a>
           </div>
           <div class="principles">
             <div class="principle">
-              <div class="t">I keep it simple</div>
-              <div class="d">One clear message per page, so nothing gets in the way of what matters.</div>
+              <span class="idx">01</span>
+              <div class="t">Simple by design</div>
+              <div class="d">One clear message per page, so the thing that matters never gets buried.</div>
             </div>
             <div class="principle">
-              <div class="t">I work with you directly</div>
-              <div class="d">No account managers or hand-offs — just the two of us, from sketch to launch.</div>
+              <span class="idx">02</span>
+              <div class="t">Direct collaboration</div>
+              <div class="d">You talk straight to the person designing and building — no account managers, no hand-offs.</div>
             </div>
             <div class="principle">
-              <div class="t">I price it fairly</div>
-              <div class="d">Professional work that fits a small organization's budget, and no surprises.</div>
+              <span class="idx">03</span>
+              <div class="t">Fair pricing</div>
+              <div class="d">Professional work priced for a small organization's budget, with no surprises.</div>
             </div>
           </div>
         </div>
@@ -265,23 +321,25 @@
       <!-- WORK -->
       <section class="view" id="view-work">
         <div class="sec work">
-          <div class="eyebrow work">Selected work</div>
+          <div class="eyebrow">Selected work</div>
           <h1 class="page-h1">A few things I've built.</h1>
-          <p class="sub" style="margin-top:12px;">Real projects for real groups. Each one is fast, clear, and easy for the owner to keep up to date.</p>
+          <p class="sub" style="margin-top:14px;">Every one is built to load fast, read clearly, and stay easy for its owner to keep current.</p>
           <div class="work-list" id="workList"></div>
-          <p class="work-foot">Live samples open in a new tab. Want something like these? <a href="#contact">Start a project →</a></p>
+          <p class="work-foot">Live samples open in a new tab. Want something like these? <a href="#contact">Reach out →</a></p>
         </div>
       </section>
 
       <!-- ABOUT -->
       <section class="view" id="view-about">
         <div class="sec">
-          <div class="eyebrow about">About</div>
-          <h1 class="page-h1" style="margin-bottom:24px;">A bit about me.</h1>
+          <div class="eyebrow">About</div>
+          <h1 class="page-h1" style="margin-bottom:30px;">A bit about me.</h1>
           <div class="prose">
-            <p>I got into this by building a site for a local club that couldn't afford the quotes they were getting. It went well, word got around, and now it's what I do. I like taking something a group genuinely cares about and giving it a home online that actually feels like them.</p>
-            <p>I work solo, so the person you email is the person doing the work. I'll tell you honestly what you need — and what you don't — and I won't disappear after launch.</p>
-            <p>If that sounds like the kind of help you're after, <a href="#contact">let's talk →</a></p>
+            <p>It started with one favor — a website for a local club that kept getting quotes they could never afford. Watching something they'd poured years into finally get the home it deserved online stuck with me. <strong>That's why I still do this.</strong></p>
+            <p>My goal is to give your project an online space that truly represents it — the work, the people, and where you want it all to go.</p>
+            <p>I work solo, so the person you email is the person at the keyboard. I'll keep you in the loop at every step — sharing progress, talking through each decision together, and making sure you always know exactly where things stand.</p>
+            <p>And I'll always give you <strong>honest feedback and a hand shaping your project's vision</strong> — what will serve it, and what won't.</p>
+            <p>If that sounds like the kind of help you're after, <a href="#contact">reach out →</a></p>
           </div>
         </div>
       </section>
@@ -289,9 +347,9 @@
       <!-- CONTACT -->
       <section class="view" id="view-contact">
         <div class="sec">
-          <div class="eyebrow contact">Contact</div>
-          <h1 class="page-h1" style="margin-bottom:12px;">Let's talk about your project.</h1>
-          <p class="sub">Tell me a little about what you're hoping to build and I'll get back to you within a day.</p>
+          <div class="eyebrow">Contact</div>
+          <h1 class="page-h1" style="margin-bottom:14px;">Tell me about your project.</h1>
+          <p class="sub">Share a little about what you have in mind, and I'll get back to you within a day.</p>
           <form class="contact" id="contactForm" novalidate>
             <input class="field" type="text" name="name" placeholder="Your name" required>
             <input class="field" type="email" name="email" placeholder="Your email" required>
@@ -311,6 +369,7 @@
 (function () {
   "use strict";
   var VIEWS = ["home", "work", "about", "contact"];
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Work data ---------- */
   var WORK = [
@@ -346,7 +405,6 @@
   var main = document.getElementById("main");
   var navLinks = document.getElementById("navLinks");
   var current = null;
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function viewFromHash() {
     var h = (location.hash || "").replace("#", "");
@@ -365,7 +423,6 @@
       var el = document.getElementById("view-" + VIEWS[i]);
       el.classList.toggle("active", VIEWS[i] === v);
     }
-    document.getElementById("waveWrap").classList.toggle("show", v === "home");
     setActiveLink(v);
   }
 
@@ -376,18 +433,15 @@
       showView(v);
       current = v;
       window.scrollTo(0, 0);
-      // fade the new view in (start hidden, then reveal on next tick)
       main.style.opacity = "0";
       main.style.transform = "translateY(12px)";
       setTimeout(function () {
         main.style.opacity = "1";
         main.style.transform = "none";
       }, 20);
-      // safety: never leave content hidden
       setTimeout(function () { main.style.opacity = "1"; main.style.transform = "none"; }, 600);
     };
     if (reduceMotion) { swap(); return; }
-    // fade current view out, then swap
     main.style.opacity = "0";
     main.style.transform = "translateY(-10px)";
     setTimeout(swap, 240);
@@ -429,80 +483,319 @@
     main.style.transform = "none";
   })();
 
-  /* ---------- WaveField (Home only) ---------- */
-  (function wave() {
-    var canvas = document.getElementById("wave");
-    var ctx = canvas.getContext("2d");
-    var w, h, dpr, mobile = false;
+  /* ---------- Rainy frosted-glass loading screen (vanilla WebGL) ----------
+     Ported from the React/WebGL artifact. A paper-and-cobalt wordmark sits
+     behind frosted glass with falling rain. Move the cursor to wipe the glass
+     clear; after a few seconds the fog lifts and the overlay fades to reveal
+     the site. Falls back to an instant reveal with no WebGL / reduced motion. */
+  (function rainLoader() {
+    var overlay = document.getElementById("rainLoader");
+    var canvas  = document.getElementById("rainCanvas");
+    var hint    = document.getElementById("rainHint");
 
-    function resize() {
-      mobile = window.matchMedia("(max-width: 640px)").matches;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      w = canvas.offsetWidth; h = canvas.offsetHeight;
-      canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    function finish() {
+      document.body.classList.remove("loading");
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
     }
-    resize();
-    window.addEventListener("resize", resize);
+    if (!overlay || !canvas) { document.body.classList.remove("loading"); return; }
+    if (reduceMotion) { finish(); return; }
 
-    var targetX = -9999, targetY = -9999, mouseX = -9999, mouseY = -9999;
-    window.addEventListener("mousemove", function (e) {
-      var r = canvas.getBoundingClientRect();
-      targetX = e.clientX - r.left; targetY = e.clientY - r.top;
-    });
-    window.addEventListener("mouseleave", function () { targetX = -9999; targetY = -9999; });
+    var gl = canvas.getContext("webgl", { alpha:false, antialias:false, premultipliedAlpha:false });
+    if (!gl) { finish(); return; }
 
-    var COLS = 78, ROWS = 52, SWELL_RADIUS = 110, SWELL_HEIGHT = 38;
-    var C0 = [165,180,252], C1 = [96,165,250], C2 = [110,240,220];
-    function lerp(a,b,t){ return a + (b-a)*t; }
-    function colorFor(f) {
-      if (f < 0.5) { var t = f/0.5; return [lerp(C0[0],C1[0],t),lerp(C0[1],C1[1],t),lerp(C0[2],C1[2],t)]; }
-      var u = (f-0.5)/0.5; return [lerp(C1[0],C2[0],u),lerp(C1[1],C2[1],u),lerp(C1[2],C2[2],u)];
-    }
+    var COBALT = "#1f4fd8", PAPER = "#f4f1ea";
+    var FONT = "'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
-    function draw(now) {
-      requestAnimationFrame(draw);
-      if (mobile) return;
-      var t = now * 0.00055;
-      mouseX += (targetX - mouseX) * 0.08; mouseY += (targetY - mouseY) * 0.08;
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = "lighter";
-      var horizon = h * 0.28;
-      for (var j = 0; j < ROWS; j++) {
-        var frac = j / (ROWS - 1);
-        var depth = Math.pow(frac, 2.2);
-        var rowY = horizon + (h - horizon) * depth;
-        var spread = 0.16 + frac * 1.18;
-        var pscale = 0.28 + frac * 1.45;
-        var col = colorFor(frac), cr = col[0]|0, cg = col[1]|0, cb = col[2]|0;
-        for (var i = 0; i < COLS; i++) {
-          var uu = i / (COLS - 1) - 0.5;
-          var sx = w * 0.5 + uu * w * spread;
-          var wx = uu * 7, wz = frac * 7;
-          var waveV = Math.sin(wx*1.1+t) + Math.cos(wz*1.3+t*0.8) + Math.sin((wx+wz)*0.9+t*1.3) + 0.6*Math.sin(wx*2.3-wz*1.6+t*1.9);
-          var lift = waveV * 11 * pscale;
-          var sy = rowY - lift;
-          var n = (waveV + 3.2) / 6.4;
-          var edge = Math.max(0, 1 - Math.pow(Math.abs(uu) * 2, 2.4));
-          var depthFade = Math.min(1, frac * 1.5);
-          var alpha = (0.025 + n * 0.12) * edge * depthFade;
-          var dx = sx - mouseX, dy = sy - mouseY;
-          var infl = Math.exp(-(dx*dx + dy*dy) / (2 * SWELL_RADIUS * SWELL_RADIUS));
-          sy -= infl * SWELL_HEIGHT;
-          alpha = Math.min(0.5, alpha + infl * 0.26);
-          var size = (0.32 + frac * 1.05) * (0.8 + n * 0.5) + infl * 0.9;
-          var wr = Math.min(255, cr + infl * (255 - cr) * 0.7);
-          var wg = Math.min(255, cg + infl * (255 - cg) * 0.7);
-          var wb = Math.min(255, cb + infl * (255 - cb) * 0.7);
-          ctx.beginPath(); ctx.arc(sx, sy, size * 2.1, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(" + (wr|0) + "," + (wg|0) + "," + (wb|0) + "," + (alpha * 0.20) + ")"; ctx.fill();
-          ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(" + (wr|0) + "," + (wg|0) + "," + (wb|0) + "," + alpha + ")"; ctx.fill();
-        }
+    var REVEAL_START = 4.6, REVEAL_END = 6.3, TRANS_START = 7.3, TRANS_END = 8.8;
+    var REFOG = 0.012, MAXOFF = 0.012;
+
+    var povX = 0, povY = 0, targetPovX = 0, targetPovY = 0, lastPx = -9999, lastPy = -9999;
+    var start = performance.now(), raf = null;
+    var dpr, cssW, cssH, W, H, clearW, clearH, clearCv;
+    var texSharp, texBlur, texClear, prog, u;
+
+    var vsSrc = "attribute vec2 aPos; void main(){ gl_Position = vec4(aPos, 0.0, 1.0); }";
+    var fsSrc = `
+      precision highp float;
+      uniform float uTime;
+      uniform vec2 uRes;
+      uniform sampler2D uSharp;
+      uniform sampler2D uBlur;
+      uniform sampler2D uClear;
+      uniform float uReveal;
+      uniform vec2 uParallax;
+      uniform float uDensity;
+      uniform float uSpeed;
+      uniform float uSize;
+
+      float N(float t){ return fract(sin(t*12345.564)*7658.76); }
+      float Saw(float b, float t){ return smoothstep(0.,b,t)*smoothstep(1.,b,t); }
+      vec3 N13(float p){
+        vec3 p3 = fract(vec3(p)*vec3(.1031,.11369,.13787));
+        p3 += dot(p3, p3.yzx+19.19);
+        return fract(vec3((p3.x+p3.y)*p3.z,(p3.x+p3.z)*p3.y,(p3.y+p3.z)*p3.x));
       }
-      ctx.globalCompositeOperation = "source-over";
+
+      vec2 DropLayer2(vec2 uv, float t){
+        vec2 UV = uv;
+        uv.y += t*0.75;
+        vec2 a = vec2(6., 1.);
+        vec2 grid = a*2.;
+        vec2 id = floor(uv*grid);
+        float colShift = N(id.x);
+        uv.y += colShift;
+        id = floor(uv*grid);
+        vec3 n = N13(id.x*35.2+id.y*2376.1);
+        vec2 st = fract(uv*grid)-vec2(.5,0);
+        float x = n.x-.5;
+        float y = UV.y*20.;
+        float wiggle = sin(y+sin(y));
+        x += wiggle*(.5-abs(x))*(n.z-.5);
+        x *= .7;
+        float ti = fract(t+n.z);
+        y = (Saw(.85,ti)-.5)*.9+.5;
+        vec2 p = vec2(x,y);
+        float d = length((st-p)*a.yx);
+        float mainDrop = smoothstep(.4,.0,d);
+        float r = sqrt(smoothstep(1.,y,st.y));
+        float cd = abs(st.x-x);
+        float trail = smoothstep(.23*r,.15*r*r,cd);
+        float trailFront = smoothstep(-.02,.02,st.y-y);
+        trail *= trailFront*r*r;
+        float trail2 = smoothstep(.2*r,.0,cd);
+        float by = fract(UV.y*10.)+(st.y-.5);
+        float bd = length(st-vec2(x,by));
+        float beads = smoothstep(.3,0.,bd)*trail2*trailFront;
+        float m = mainDrop+beads*r;
+        return vec2(m, trail);
+      }
+
+      float StaticDrops(vec2 uv, float t){
+        uv *= 40.;
+        vec2 id = floor(uv);
+        uv = fract(uv)-.5;
+        vec3 n = N13(id.x*107.45+id.y*3543.654);
+        vec2 p = (n.xy-.5)*.7;
+        float d = length(uv-p);
+        float fade = Saw(.025, fract(t+n.z));
+        return smoothstep(.3,0.,d)*fract(n.z*10.)*fade;
+      }
+
+      vec2 Drops(vec2 uv, float t, float l0, float l1, float l2){
+        float s = StaticDrops(uv,t)*l0;
+        vec2 m1 = DropLayer2(uv,t)*l1;
+        vec2 m2 = DropLayer2(uv*1.85,t)*l2;
+        float c = s+m1.x+m2.x;
+        c = smoothstep(.3,1.,c);
+        return vec2(c, max(m1.y*l0, m2.y*l1));
+      }
+
+      void main(){
+        vec2 uv = gl_FragCoord.xy/uRes.xy;
+        float aspect = uRes.x/uRes.y;
+        vec2 suv = vec2((uv.x-.5)*aspect+.5, uv.y);
+        vec2 duv = suv / uSize;
+        float t = uTime*0.2*uSpeed;
+
+        float rain = (1.0-uReveal)*uDensity;
+        float l0 = 2.2*rain;
+        float l1 = 0.95*rain;
+        float l2 = 0.6*rain;
+
+        vec2 c = Drops(duv, t, l0, l1, l2);
+        vec2 e = vec2(.0012, 0.)/uSize;
+        float cx = Drops(duv+e.xy, t, l0,l1,l2).x;
+        float cy = Drops(duv+e.yx, t, l0,l1,l2).x;
+        vec2 n = vec2(cx-c.x, cy-c.x);
+
+        float clear = texture2D(uClear, uv).r;
+        float focus = clamp(c.x + clear*1.3 + uReveal*1.35, 0., 1.);
+
+        vec2 baseUV = uv + uParallax;
+        vec2 refr = vec2(n.x/aspect, n.y)*1.7;
+        vec3 sharp = texture2D(uSharp, baseUV + refr).rgb;
+        vec3 blur  = texture2D(uBlur,  baseUV + refr*0.4).rgb;
+        vec3 col = mix(blur, sharp, focus);
+
+        float ln = (n.x+n.y)*3.2;
+        float lit = clamp(ln, 0., 1.) * c.x;
+        float dark = clamp(-ln, 0., 0.7) * c.x;
+        col += lit*vec3(.5,.55,.72);
+        col -= dark*vec3(.10,.12,.18);
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    function compile(vs, fs) {
+      function sh(type, src) {
+        var s = gl.createShader(type);
+        gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+        return s;
+      }
+      var p = gl.createProgram();
+      gl.attachShader(p, sh(gl.VERTEX_SHADER, vs));
+      gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(p);
+      if (!gl.getProgramParameter(p, gl.LINK_STATUS)) console.error(gl.getProgramInfoLog(p));
+      return p;
     }
-    requestAnimationFrame(draw);
+    function makeTex() {
+      var t = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      return t;
+    }
+    function mk(w, h) { var c = document.createElement("canvas"); c.width = w; c.height = h; return c; }
+
+    function renderScene(w, h, blurPx) {
+      var c = mk(w, h);
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, h);
+      var cx = w / 2, cy = h / 2;
+      var mainSize = Math.min(w * 0.115, 150 * dpr);
+      if (blurPx > 0) ctx.filter = "blur(" + blurPx + "px)";
+      ctx.fillStyle = COBALT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.font = "700 " + mainSize + "px " + FONT;
+      ctx.fillText("David Manson", cx, cy - mainSize * 0.08);
+      var sub = mainSize * 0.235;
+      ctx.font = "600 " + sub + "px " + FONT;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = (sub * 0.28) + "px";
+      ctx.globalAlpha = 0.92;
+      ctx.fillText("WEB DESIGN", cx, cy + mainSize * 0.66);
+      ctx.globalAlpha = 1;
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      var ruleW = mainSize * 1.55;
+      ctx.strokeStyle = COBALT; ctx.globalAlpha = 0.5; ctx.lineWidth = Math.max(1, 1.4 * dpr);
+      ctx.beginPath();
+      ctx.moveTo(cx - ruleW / 2, cy + mainSize * 0.36);
+      ctx.lineTo(cx + ruleW / 2, cy + mainSize * 0.36);
+      ctx.stroke();
+      ctx.globalAlpha = 1; ctx.filter = "none";
+      return c;
+    }
+
+    function uploadClear() {
+      gl.bindTexture(gl.TEXTURE_2D, texClear);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, clearCv);
+    }
+
+    function build() {
+      dpr = Math.min(2, window.devicePixelRatio || 1);
+      var w = Math.floor(window.innerWidth), h = Math.floor(window.innerHeight);
+      cssW = w; cssH = h;
+      W = Math.floor(w * dpr); H = Math.floor(h * dpr);
+      canvas.width = W; canvas.height = H;
+      gl.viewport(0, 0, W, H);
+      var sharp = renderScene(W, H, 0);
+      var blur = renderScene(W, H, 7 * dpr);
+      gl.bindTexture(gl.TEXTURE_2D, texSharp);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sharp);
+      gl.bindTexture(gl.TEXTURE_2D, texBlur);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, blur);
+      clearW = Math.max(2, Math.floor(w / 3));
+      clearH = Math.max(2, Math.floor(h / 3));
+      clearCv = mk(clearW, clearH);
+      uploadClear();
+    }
+
+    function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+    function easeInOut(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+
+    function handleMove(e) {
+      var px = e.clientX, py = e.clientY;
+      targetPovX = (px / cssW - 0.5) * 2 * MAXOFF;
+      targetPovY = (py / cssH - 0.5) * 2 * MAXOFF;
+      if (clearCv && lastPx > -9000) {
+        var cc = clearCv.getContext("2d");
+        var sx = px / cssW * clearW, sy = py / cssH * clearH;
+        var ex = lastPx / cssW * clearW, ey = lastPy / cssH * clearH;
+        var br = Math.max(3, clearW * 0.045);
+        cc.strokeStyle = "rgba(255,255,255,1)";
+        cc.lineWidth = br * 1.6; cc.lineCap = "round";
+        cc.beginPath(); cc.moveTo(ex, ey); cc.lineTo(sx, sy); cc.stroke();
+      }
+      lastPx = px; lastPy = py;
+    }
+
+    function loop(now) {
+      var t = (now - start) / 1000;
+
+      if (clearCv) {
+        var cc = clearCv.getContext("2d");
+        cc.globalCompositeOperation = "destination-out";
+        cc.fillStyle = "rgba(0,0,0," + REFOG + ")";
+        cc.fillRect(0, 0, clearW, clearH);
+        cc.globalCompositeOperation = "source-over";
+        uploadClear();
+      }
+
+      povX += (targetPovX - povX) * 0.06;
+      povY += (targetPovY - povY) * 0.06;
+
+      var reveal = easeInOut(clamp((t - REVEAL_START) / (REVEAL_END - REVEAL_START), 0, 1));
+
+      gl.useProgram(prog);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texSharp); gl.uniform1i(u.sharp, 0);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texBlur); gl.uniform1i(u.blur, 1);
+      gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texClear); gl.uniform1i(u.clear, 2);
+      gl.uniform1f(u.time, t);
+      gl.uniform2f(u.res, W, H);
+      gl.uniform1f(u.reveal, reveal);
+      gl.uniform2f(u.parallax, povX, povY);
+      gl.uniform1f(u.density, 1.0);
+      gl.uniform1f(u.speed, 1.0);
+      gl.uniform1f(u.size, 1.0);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+      if (hint) hint.style.opacity = t > REVEAL_START ? String(clamp(1 - (t - REVEAL_START) / 0.8, 0, 1)) : "1";
+
+      if (t < TRANS_START) {
+        overlay.style.opacity = "1";
+      } else {
+        var k = clamp((t - TRANS_START) / (TRANS_END - TRANS_START), 0, 1);
+        overlay.style.opacity = String(1 - easeInOut(k));
+        if (k > 0.5) overlay.style.pointerEvents = "none";
+      }
+
+      if (t > TRANS_END + 0.4) { finish(); return; }
+      raf = requestAnimationFrame(loop);
+    }
+
+    /* ---- init ---- */
+    prog = compile(vsSrc, fsSrc);
+    gl.useProgram(prog);
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, "aPos");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    u = {
+      time: gl.getUniformLocation(prog, "uTime"),
+      res: gl.getUniformLocation(prog, "uRes"),
+      sharp: gl.getUniformLocation(prog, "uSharp"),
+      blur: gl.getUniformLocation(prog, "uBlur"),
+      clear: gl.getUniformLocation(prog, "uClear"),
+      reveal: gl.getUniformLocation(prog, "uReveal"),
+      parallax: gl.getUniformLocation(prog, "uParallax"),
+      density: gl.getUniformLocation(prog, "uDensity"),
+      speed: gl.getUniformLocation(prog, "uSpeed"),
+      size: gl.getUniformLocation(prog, "uSize")
+    };
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    texSharp = makeTex(); texBlur = makeTex(); texClear = makeTex();
+    build();
+    // Re-render the wordmark once the webfont has actually loaded.
+    if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { build(); }); }
+    window.addEventListener("resize", build);
+    window.addEventListener("pointermove", handleMove);
+    window.addEventListener("pointerleave", function () { targetPovX = 0; targetPovY = 0; lastPx = -9999; lastPy = -9999; });
+    raf = requestAnimationFrame(loop);
   })();
 })();
 </script>
