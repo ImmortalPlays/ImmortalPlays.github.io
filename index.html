@@ -540,10 +540,10 @@
   (function rainLoader() {
     // LAYER_MODE controls how the title is split into depth planes that move
     // at different parallax rates behind the glass:
-    //   'depth' - whole wordmark on one plane, floating in front of the paper.
-    //   'split' - "David Manson" and "WEB DESIGN" on separate planes (default).
+    //   'depth' - whole wordmark on one plane, floating in front of the paper (default).
+    //   'split' - "David Manson" and "WEB DESIGN" on separate planes.
     //   'echo'  - a faint cobalt ghost of the title trails behind the sharp one.
-    var __cfg = (function(){ var d={mode:"split",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } })();
+    var __cfg = (function(){ var d={mode:"depth",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } })();
     var LAYER_MODE = __cfg.mode;
 
     var overlay = document.getElementById("rainLoader");
@@ -940,7 +940,7 @@
     if (!panel) return;
     if (location.hostname === "immortalplays.github.io") return; // never on the live site
     panel.hidden = false;
-    function cfg(){ var d={mode:"split",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } }
+    function cfg(){ var d={mode:"depth",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } }
     function save(c){ try{ localStorage.setItem("dm_loader", JSON.stringify(c)); }catch(e){} }
     var c = cfg();
     var seg = document.getElementById("twMode");
