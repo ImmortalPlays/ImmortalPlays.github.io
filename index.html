@@ -42,8 +42,9 @@
   a { color:inherit; }
 
   /* ---------- Abstract brand shapes (fixed background) ---------- */
-  #shapes { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  #shapes { position:fixed; inset:-46px; z-index:0; pointer-events:none; }
   #shapes svg { width:100%; height:100%; display:block; }
+  #shapes .plx { will-change:transform; }
   .drift { transform-box:fill-box; transform-origin:center; }
   .drift-a { animation:driftA 26s ease-in-out infinite alternate; }
   .drift-b { animation:driftB 32s ease-in-out infinite alternate; }
@@ -55,7 +56,7 @@
   /* ---------- Rainy frosted-glass loading screen ---------- */
   #rainLoader {
     position:fixed; inset:0; z-index:9999; background:var(--paper);
-    overflow:hidden; transition:opacity .05s linear; will-change:opacity;
+    overflow:hidden; transition:opacity .05s linear; will-change:opacity, transform;
   }
   #rainCanvas { position:absolute; inset:0; display:block; width:100%; height:100%; }
   #rainHint {
@@ -227,6 +228,30 @@
     .view { transition:none !important; }
     .drift-a, .drift-b, .drift-c { animation:none !important; }
   }
+
+  /* ---------- Loader tweak panel (preview only — hidden on the live site) ---------- */
+  #loaderTweaks {
+    position:fixed; right:16px; bottom:16px; z-index:10000; width:212px;
+    font-family:var(--font-display); background:rgba(255,255,255,0.94);
+    border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-soft);
+    padding:14px 14px 13px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  #loaderTweaks h4 { margin:0 0 10px; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--blue); font-weight:600; }
+  .tw-seg { display:flex; gap:4px; margin-bottom:13px; }
+  .tw-seg button {
+    flex:1; padding:7px 0; font-family:inherit; font-size:0.7rem; font-weight:600;
+    border-radius:8px; border:1px solid var(--line); background:#fff; color:var(--ink-soft); cursor:pointer;
+    transition:background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .tw-seg button.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+  .tw-row { display:flex; align-items:center; justify-content:space-between; font-size:0.7rem; color:var(--ink-soft); margin-bottom:6px; }
+  .tw-row b { color:var(--ink); font-weight:600; font-variant-numeric:tabular-nums; }
+  #twPar { width:100%; accent-color:var(--blue); margin:0; }
+  .tw-replay {
+    width:100%; margin-top:12px; padding:8px 0; border:0; border-radius:8px;
+    background:var(--ink); color:#fff; font-family:inherit; font-weight:600; font-size:0.76rem; cursor:pointer;
+  }
+  .tw-replay:hover { background:#000; }
 </style>
 </head>
 
@@ -249,24 +274,32 @@
 
       <line x1="-60" y1="320" x2="760" y2="-60" stroke="#17181d" stroke-opacity="0.05" stroke-width="1"></line>
 
-      <g class="drift drift-a">
-        <circle cx="1296" cy="92" r="252" fill="none" stroke="#1f4fd8" stroke-opacity="0.16" stroke-width="1.5"></circle>
-        <circle cx="1296" cy="92" r="150" fill="#1f4fd8" fill-opacity="0.05"></circle>
+      <g class="plx" data-d="6">
+        <g class="drift drift-a">
+          <circle cx="1296" cy="92" r="252" fill="none" stroke="#1f4fd8" stroke-opacity="0.16" stroke-width="1.5"></circle>
+          <circle cx="1296" cy="92" r="150" fill="#1f4fd8" fill-opacity="0.05"></circle>
+        </g>
       </g>
 
-      <g class="drift drift-b">
-        <circle cx="118" cy="772" r="212" fill="#1f4fd8" fill-opacity="0.06"></circle>
-        <path d="M 56 486 A 226 226 0 0 1 470 426" fill="none" stroke="#1f4fd8" stroke-opacity="0.30" stroke-width="2"></path>
+      <g class="plx" data-d="12">
+        <g class="drift drift-b">
+          <circle cx="118" cy="772" r="212" fill="#1f4fd8" fill-opacity="0.06"></circle>
+          <path d="M 56 486 A 226 226 0 0 1 470 426" fill="none" stroke="#1f4fd8" stroke-opacity="0.30" stroke-width="2"></path>
+        </g>
       </g>
 
-      <g class="drift drift-c">
-        <rect x="1016" y="612" width="312" height="234" fill="url(#dotgrid)" transform="rotate(-8 1172 729)"></rect>
-        <circle cx="1150" cy="772" r="82" fill="#e0a96b" fill-opacity="0.16"></circle>
+      <g class="plx" data-d="9">
+        <g class="drift drift-c">
+          <rect x="1016" y="612" width="312" height="234" fill="url(#dotgrid)" transform="rotate(-8 1172 729)"></rect>
+          <circle cx="1150" cy="772" r="82" fill="#e0a96b" fill-opacity="0.16"></circle>
+        </g>
       </g>
 
-      <circle cx="474" cy="172" r="7" fill="#1f4fd8"></circle>
-      <circle cx="902" cy="636" r="5" fill="#e0a96b"></circle>
-      <circle cx="690" cy="824" r="4" fill="#1f4fd8" fill-opacity="0.5"></circle>
+      <g class="plx" data-d="18">
+        <circle cx="474" cy="172" r="7" fill="#1f4fd8"></circle>
+        <circle cx="902" cy="636" r="5" fill="#e0a96b"></circle>
+        <circle cx="690" cy="824" r="4" fill="#1f4fd8" fill-opacity="0.5"></circle>
+      </g>
     </svg>
   </div>
 
@@ -363,6 +396,19 @@
 
       <footer>© 2026 David Manson · Independent Web Design</footer>
     </main>
+  </div>
+
+  <!-- Loader preview controls — auto-hidden on immortalplays.github.io -->
+  <div id="loaderTweaks" hidden>
+    <h4>Loader title</h4>
+    <div class="tw-seg" id="twMode">
+      <button type="button" data-m="depth">Depth</button>
+      <button type="button" data-m="split">Split</button>
+      <button type="button" data-m="echo">Echo</button>
+    </div>
+    <div class="tw-row"><span>Parallax</span><b id="twParVal">0.034</b></div>
+    <input type="range" id="twPar" min="0" max="0.08" step="0.002">
+    <button type="button" class="tw-replay" id="twReplay">Replay loader ↻</button>
   </div>
 
 <script>
@@ -485,16 +531,31 @@
 
   /* ---------- Rainy frosted-glass loading screen (vanilla WebGL) ----------
      Ported from the React/WebGL artifact. A paper-and-cobalt wordmark sits
-     behind frosted glass with falling rain. Move the cursor to wipe the glass
-     clear; after a few seconds the fog lifts and the overlay fades to reveal
-     the site. Falls back to an instant reveal with no WebGL / reduced motion. */
+     behind frosted glass with falling rain, split across parallax planes.
+     Move the cursor to wipe the glass clear; the fog lifts, holds, then a
+     fast swipe-down curtain drops away to reveal the site. Falls back to an
+     instant reveal with no WebGL / reduced motion. */
   (function rainLoader() {
+    // LAYER_MODE controls how the title is split into depth planes that move
+    // at different parallax rates behind the glass:
+    //   'depth' - whole wordmark on one plane, floating in front of the paper.
+    //   'split' - "David Manson" and "WEB DESIGN" on separate planes (default).
+    //   'echo'  - a faint cobalt ghost of the title trails behind the sharp one.
+    var __cfg = (function(){ var d={mode:"split",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } })();
+    var LAYER_MODE = __cfg.mode;
+
     var overlay = document.getElementById("rainLoader");
     var canvas  = document.getElementById("rainCanvas");
     var hint    = document.getElementById("rainHint");
+    var stage   = document.querySelector(".stage");
 
+    function resetStage() {
+      if (!stage) return;
+      stage.style.transition = ""; stage.style.opacity = ""; stage.style.transform = "";
+    }
     function finish() {
       document.body.classList.remove("loading");
+      resetStage();
       if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
     }
     if (!overlay || !canvas) { document.body.classList.remove("loading"); return; }
@@ -503,30 +564,39 @@
     var gl = canvas.getContext("webgl", { alpha:false, antialias:false, premultipliedAlpha:false });
     if (!gl) { finish(); return; }
 
-    var COBALT = "#1f4fd8", PAPER = "#f4f1ea";
+    var COBALT = "#1f4fd8";
     var FONT = "'Space Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif";
 
-    var REVEAL_START = 4.6, REVEAL_END = 6.3, TRANS_START = 7.3, TRANS_END = 8.8;
-    var REFOG = 0.012, MAXOFF = 0.012;
+    // Reveal the title (4.6-6.3), HOLD it fully clear, then a fast swipe-down
+    // curtain (8.4-8.95) drops away to reveal the page - quick, no fade.
+    var REVEAL_START = 4.6, REVEAL_END = 6.3, TRANS_START = 8.4, TRANS_END = 8.95;
+    var REFOG = 0.012, MAXOFF = (__cfg.par != null ? __cfg.par : 0.034); // pointer parallax (live-tweakable)
+
+    // Per-layer parallax multipliers (how far each plane shifts vs the cursor).
+    var MUL = LAYER_MODE === "echo"  ? { l1: 0.55, l2: 1.7 }
+            : LAYER_MODE === "split" ? { l1: 1.0,  l2: 0.4 }
+            : /* depth */              { l1: 1.0,  l2: 0.0 };
 
     var povX = 0, povY = 0, targetPovX = 0, targetPovY = 0, lastPx = -9999, lastPy = -9999;
+    window.__dmLoader = { setPar: function(v){ MAXOFF = v; } }; // live parallax hook for the tweak panel
     var start = performance.now(), raf = null;
     var dpr, cssW, cssH, W, H, clearW, clearH, clearCv;
-    var texSharp, texBlur, texClear, prog, u;
+    var texL1s, texL1b, texL2s, texL2b, texClear, prog, u;
 
     var vsSrc = "attribute vec2 aPos; void main(){ gl_Position = vec4(aPos, 0.0, 1.0); }";
     var fsSrc = `
       precision highp float;
       uniform float uTime;
       uniform vec2 uRes;
-      uniform sampler2D uSharp;
-      uniform sampler2D uBlur;
+      uniform sampler2D uL1s;
+      uniform sampler2D uL1b;
+      uniform sampler2D uL2s;
+      uniform sampler2D uL2b;
       uniform sampler2D uClear;
       uniform float uReveal;
-      uniform vec2 uParallax;
-      uniform float uDensity;
-      uniform float uSpeed;
-      uniform float uSize;
+      uniform vec2 uPar;
+      uniform float uMulL1;
+      uniform float uMulL2;
 
       float N(float t){ return fract(sin(t*12345.564)*7658.76); }
       float Saw(float b, float t){ return smoothstep(0.,b,t)*smoothstep(1.,b,t); }
@@ -590,32 +660,46 @@
         return vec2(c, max(m1.y*l0, m2.y*l1));
       }
 
+      vec4 frost(sampler2D s, sampler2D b, vec2 uv, float focus){
+        vec4 sh = texture2D(s, uv);
+        vec4 bl = texture2D(b, uv);
+        return mix(bl, sh, focus);
+      }
+
       void main(){
         vec2 uv = gl_FragCoord.xy/uRes.xy;
         float aspect = uRes.x/uRes.y;
         vec2 suv = vec2((uv.x-.5)*aspect+.5, uv.y);
-        vec2 duv = suv / uSize;
-        float t = uTime*0.2*uSpeed;
+        vec2 duv = suv;
+        float t = uTime*0.2;
 
-        float rain = (1.0-uReveal)*uDensity;
+        float rain = (1.0-uReveal);
         float l0 = 2.2*rain;
         float l1 = 0.95*rain;
         float l2 = 0.6*rain;
 
         vec2 c = Drops(duv, t, l0, l1, l2);
-        vec2 e = vec2(.0012, 0.)/uSize;
+        vec2 e = vec2(.0012, 0.);
         float cx = Drops(duv+e.xy, t, l0,l1,l2).x;
         float cy = Drops(duv+e.yx, t, l0,l1,l2).x;
         vec2 n = vec2(cx-c.x, cy-c.x);
 
         float clear = texture2D(uClear, uv).r;
         float focus = clamp(c.x + clear*1.3 + uReveal*1.35, 0., 1.);
-
-        vec2 baseUV = uv + uParallax;
         vec2 refr = vec2(n.x/aspect, n.y)*1.7;
-        vec3 sharp = texture2D(uSharp, baseUV + refr).rgb;
-        vec3 blur  = texture2D(uBlur,  baseUV + refr*0.4).rgb;
-        vec3 col = mix(blur, sharp, focus);
+
+        vec3 PAPER = vec3(0.957, 0.945, 0.918);
+        vec3 col = PAPER;
+
+        // layer 2 (behind) - drawn first
+        vec2 uv2 = uv + uPar*uMulL2 + refr;
+        vec4 lay2 = frost(uL2s, uL2b, uv2, focus);
+        col = mix(col, lay2.rgb, lay2.a);
+
+        // layer 1 (front)
+        vec2 uv1 = uv + uPar*uMulL1 + refr;
+        vec4 lay1 = frost(uL1s, uL1b, uv1, focus);
+        col = mix(col, lay1.rgb, lay1.a);
 
         float ln = (n.x+n.y)*3.2;
         float lit = clamp(ln, 0., 1.) * c.x;
@@ -652,31 +736,52 @@
     }
     function mk(w, h) { var c = document.createElement("canvas"); c.width = w; c.height = h; return c; }
 
-    function renderScene(w, h, blurPx) {
+    // Draw a single transparent layer (text only, no paper). opts: {name, tag, blur, alpha}
+    function drawLayer(w, h, opts) {
       var c = mk(w, h);
       var ctx = c.getContext("2d");
-      ctx.fillStyle = PAPER; ctx.fillRect(0, 0, w, h);
       var cx = w / 2, cy = h / 2;
       var mainSize = Math.min(w * 0.115, 150 * dpr);
-      if (blurPx > 0) ctx.filter = "blur(" + blurPx + "px)";
+      var a = opts.alpha == null ? 1 : opts.alpha;
+      if (opts.blur > 0) ctx.filter = "blur(" + opts.blur + "px)";
       ctx.fillStyle = COBALT; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.font = "700 " + mainSize + "px " + FONT;
-      ctx.fillText("David Manson", cx, cy - mainSize * 0.08);
-      var sub = mainSize * 0.235;
-      ctx.font = "600 " + sub + "px " + FONT;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = (sub * 0.28) + "px";
-      ctx.globalAlpha = 0.92;
-      ctx.fillText("WEB DESIGN", cx, cy + mainSize * 0.66);
-      ctx.globalAlpha = 1;
-      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
-      var ruleW = mainSize * 1.55;
-      ctx.strokeStyle = COBALT; ctx.globalAlpha = 0.5; ctx.lineWidth = Math.max(1, 1.4 * dpr);
-      ctx.beginPath();
-      ctx.moveTo(cx - ruleW / 2, cy + mainSize * 0.36);
-      ctx.lineTo(cx + ruleW / 2, cy + mainSize * 0.36);
-      ctx.stroke();
+      if (opts.name) {
+        ctx.globalAlpha = a;
+        ctx.font = "700 " + mainSize + "px " + FONT;
+        ctx.fillText("David Manson", cx, cy - mainSize * 0.08);
+      }
+      if (opts.tag) {
+        var sub = mainSize * 0.235;
+        ctx.font = "600 " + sub + "px " + FONT;
+        if ("letterSpacing" in ctx) ctx.letterSpacing = (sub * 0.28) + "px";
+        ctx.globalAlpha = a * 0.92;
+        ctx.fillText("WEB DESIGN", cx, cy + mainSize * 0.66);
+        if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+        var ruleW = mainSize * 1.55;
+        ctx.strokeStyle = COBALT; ctx.globalAlpha = a * 0.5; ctx.lineWidth = Math.max(1, 1.4 * dpr);
+        ctx.beginPath();
+        ctx.moveTo(cx - ruleW / 2, cy + mainSize * 0.36);
+        ctx.lineTo(cx + ruleW / 2, cy + mainSize * 0.36);
+        ctx.stroke();
+      }
       ctx.globalAlpha = 1; ctx.filter = "none";
       return c;
+    }
+
+    // What each plane contains, per mode.
+    function layerDefs() {
+      if (LAYER_MODE === "split") return { l1: { name:true }, l2: { tag:true } };
+      if (LAYER_MODE === "echo")  return { l1: { name:true, tag:true }, l2: { name:true, tag:true, alpha:0.5 } };
+      return { l1: { name:true, tag:true }, l2: {} }; // depth: l2 empty
+    }
+
+    function uploadPair(ts, tb, opt) {
+      var sharp = drawLayer(W, H, Object.assign({ blur:0 }, opt));
+      var blur  = drawLayer(W, H, Object.assign({ blur:7 * dpr }, opt));
+      gl.bindTexture(gl.TEXTURE_2D, ts);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sharp);
+      gl.bindTexture(gl.TEXTURE_2D, tb);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, blur);
     }
 
     function uploadClear() {
@@ -691,12 +796,9 @@
       W = Math.floor(w * dpr); H = Math.floor(h * dpr);
       canvas.width = W; canvas.height = H;
       gl.viewport(0, 0, W, H);
-      var sharp = renderScene(W, H, 0);
-      var blur = renderScene(W, H, 7 * dpr);
-      gl.bindTexture(gl.TEXTURE_2D, texSharp);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, sharp);
-      gl.bindTexture(gl.TEXTURE_2D, texBlur);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, blur);
+      var defs = layerDefs();
+      uploadPair(texL1s, texL1b, defs.l1);
+      uploadPair(texL2s, texL2b, defs.l2);
       clearW = Math.max(2, Math.floor(w / 3));
       clearH = Math.max(2, Math.floor(h / 3));
       clearCv = mk(clearW, clearH);
@@ -705,6 +807,7 @@
 
     function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
     function easeInOut(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
 
     function handleMove(e) {
       var px = e.clientX, py = e.clientY;
@@ -740,29 +843,33 @@
       var reveal = easeInOut(clamp((t - REVEAL_START) / (REVEAL_END - REVEAL_START), 0, 1));
 
       gl.useProgram(prog);
-      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texSharp); gl.uniform1i(u.sharp, 0);
-      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texBlur); gl.uniform1i(u.blur, 1);
-      gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texClear); gl.uniform1i(u.clear, 2);
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, texClear); gl.uniform1i(u.clear, 0);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, texL1s); gl.uniform1i(u.l1s, 1);
+      gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, texL1b); gl.uniform1i(u.l1b, 2);
+      gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, texL2s); gl.uniform1i(u.l2s, 3);
+      gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, texL2b); gl.uniform1i(u.l2b, 4);
       gl.uniform1f(u.time, t);
       gl.uniform2f(u.res, W, H);
       gl.uniform1f(u.reveal, reveal);
-      gl.uniform2f(u.parallax, povX, povY);
-      gl.uniform1f(u.density, 1.0);
-      gl.uniform1f(u.speed, 1.0);
-      gl.uniform1f(u.size, 1.0);
+      gl.uniform2f(u.par, povX, povY);
+      gl.uniform1f(u.mulL1, MUL.l1);
+      gl.uniform1f(u.mulL2, MUL.l2);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
       if (hint) hint.style.opacity = t > REVEAL_START ? String(clamp(1 - (t - REVEAL_START) / 0.8, 0, 1)) : "1";
 
+      // -- Transition: a fast swipe-down curtain drops away to reveal the page --
       if (t < TRANS_START) {
         overlay.style.opacity = "1";
       } else {
         var k = clamp((t - TRANS_START) / (TRANS_END - TRANS_START), 0, 1);
-        overlay.style.opacity = String(1 - easeInOut(k));
-        if (k > 0.5) overlay.style.pointerEvents = "none";
+        var ek = easeInOutCubic(k);
+        if (stage) { stage.style.transition = "none"; stage.style.opacity = "1"; stage.style.transform = "none"; }
+        overlay.style.transform = "translateY(" + (100 * ek) + "%)";
+        if (k > 0.05) overlay.style.pointerEvents = "none";
       }
 
-      if (t > TRANS_END + 0.4) { finish(); return; }
+      if (t > TRANS_END + 0.3) { finish(); return; }
       raf = requestAnimationFrame(loop);
     }
 
@@ -778,17 +885,18 @@
     u = {
       time: gl.getUniformLocation(prog, "uTime"),
       res: gl.getUniformLocation(prog, "uRes"),
-      sharp: gl.getUniformLocation(prog, "uSharp"),
-      blur: gl.getUniformLocation(prog, "uBlur"),
+      l1s: gl.getUniformLocation(prog, "uL1s"),
+      l1b: gl.getUniformLocation(prog, "uL1b"),
+      l2s: gl.getUniformLocation(prog, "uL2s"),
+      l2b: gl.getUniformLocation(prog, "uL2b"),
       clear: gl.getUniformLocation(prog, "uClear"),
       reveal: gl.getUniformLocation(prog, "uReveal"),
-      parallax: gl.getUniformLocation(prog, "uParallax"),
-      density: gl.getUniformLocation(prog, "uDensity"),
-      speed: gl.getUniformLocation(prog, "uSpeed"),
-      size: gl.getUniformLocation(prog, "uSize")
+      par: gl.getUniformLocation(prog, "uPar"),
+      mulL1: gl.getUniformLocation(prog, "uMulL1"),
+      mulL2: gl.getUniformLocation(prog, "uMulL2")
     };
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    texSharp = makeTex(); texBlur = makeTex(); texClear = makeTex();
+    texL1s = makeTex(); texL1b = makeTex(); texL2s = makeTex(); texL2b = makeTex(); texClear = makeTex();
     build();
     // Re-render the wordmark once the webfont has actually loaded.
     if (document.fonts && document.fonts.ready) { document.fonts.ready.then(function () { build(); }); }
@@ -796,6 +904,46 @@
     window.addEventListener("pointermove", handleMove);
     window.addEventListener("pointerleave", function () { targetPovX = 0; targetPovY = 0; lastPx = -9999; lastPy = -9999; });
     raf = requestAnimationFrame(loop);
+  })();
+
+  /* ---------- Loader tweak panel (preview only) ---------- */
+  (function loaderTweaks(){
+    var panel = document.getElementById("loaderTweaks");
+    if (!panel) return;
+    if (location.hostname === "immortalplays.github.io") return; // never on the live site
+    panel.hidden = false;
+    function cfg(){ var d={mode:"split",par:0.034}; try{ return Object.assign(d, JSON.parse(localStorage.getItem("dm_loader")||"{}")); }catch(e){ return d; } }
+    function save(c){ try{ localStorage.setItem("dm_loader", JSON.stringify(c)); }catch(e){} }
+    var c = cfg();
+    var seg = document.getElementById("twMode");
+    function paint(){ var bs = seg.querySelectorAll("button"); for (var i=0;i<bs.length;i++) bs[i].classList.toggle("on", bs[i].getAttribute("data-m") === c.mode); }
+    paint();
+    seg.addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; c.mode = b.getAttribute("data-m"); save(c); paint(); location.reload(); });
+    var par = document.getElementById("twPar");
+    var parVal = document.getElementById("twParVal");
+    par.value = c.par; parVal.textContent = (+c.par).toFixed(3);
+    par.addEventListener("input", function(){ c.par = +par.value; parVal.textContent = c.par.toFixed(3); save(c); if (window.__dmLoader) window.__dmLoader.setPar(c.par); });
+    document.getElementById("twReplay").addEventListener("click", function(){ location.reload(); });
+  })();
+
+  /* ---------- Background-shape parallax (layered, cursor-driven) ---------- */
+  (function shapeParallax(){
+    if (reduceMotion) return;
+    var layers = [].slice.call(document.querySelectorAll("#shapes .plx"));
+    if (!layers.length) return;
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener("pointermove", function(e){
+      tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+    (function tick(){
+      cx += (tx - cx) * 0.07; cy += (ty - cy) * 0.07;
+      for (var i = 0; i < layers.length; i++){
+        var d = parseFloat(layers[i].getAttribute("data-d")) || 0;
+        layers[i].setAttribute("transform", "translate(" + (cx * d).toFixed(2) + " " + (cy * d).toFixed(2) + ")");
+      }
+      requestAnimationFrame(tick);
+    })();
   })();
 })();
 </script>
