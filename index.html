@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>David Manson — Web Design</title>
+<title>David Manson · Web Design</title>
 <meta name="description" content="David Manson designs clear, affordable websites for clubs, nonprofits, and small teams.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -178,6 +178,10 @@
   .work-foot a, .sub a, .prose a, .contact-foot a { color:var(--blue); font-weight:500; }
 
   /* Prose / About */
+  .about-grid { display:grid; grid-template-columns:0.82fr 1.18fr; gap:60px; align-items:start; }
+  .about-intro .page-h1 { margin:0 0 22px; }
+  .about-lead { color:var(--ink-soft); font-size:1.2rem; line-height:1.6; margin:0; max-width:420px; }
+  .about-cta { margin-top:30px; }
   .prose { max-width:640px; border-left:2px solid var(--blue); padding-left:28px; }
   .prose p { color:var(--ink-soft); line-height:1.7; font-size:1.08rem; margin:0 0 22px; }
   .prose p strong { color:var(--ink); font-weight:600; }
@@ -222,6 +226,8 @@
     .nav-links a.active::after { display:none; }
     .nav-links a.active { background:var(--blue-tint); }
     .principles { gap:30px; }
+    .about-grid { grid-template-columns:1fr; gap:34px; }
+    .about-lead { max-width:none; }
     .prose { padding-left:20px; }
   }
 
@@ -327,7 +333,7 @@
         <div class="sec home">
           <div class="eyebrow">Web design</div>
           <h1 class="hero-h1">Websites that feel like <span class="grad">you.</span></h1>
-          <p class="lead">Hi, I'm David. I help clubs, nonprofits, and small teams build an online home that's clear, fast, and easy to look after — from start to finish, you work directly with me to personalize your website.</p>
+          <p class="lead">Hi, I'm David. I help clubs, nonprofits, and small teams build an online home that's clear, fast, and easy to look after. From start to finish, you work directly with me to personalize your website.</p>
           <div class="cta-row">
             <a href="#contact" class="btn btn-primary">Start a project</a>
             <a href="#work" class="btn btn-secondary">See the work</a>
@@ -366,14 +372,18 @@
       <!-- ABOUT -->
       <section class="view" id="view-about">
         <div class="sec">
-          <div class="eyebrow">About</div>
-          <h1 class="page-h1" style="margin-bottom:30px;">A bit about me.</h1>
-          <div class="prose">
-            <p>It started with one favor — a website for a local club that kept getting quotes they could never afford. Watching something they'd poured years into finally get the home it deserved online stuck with me. <strong>That's why I still do this.</strong></p>
-            <p>My goal is to give your project an online space that truly represents it — the work, the people, and where you want it all to go.</p>
-            <p>I work solo, so the person you email is the person doing the work. I'll keep you in the loop at every step — sharing progress, talking through each decision together, and making sure you understand where things stand is the job.</p>
-            <p>And I'll always give you <strong>honest feedback and shape your project's vision</strong>.</p>
-            <p>If that sounds like the kind of help you're after, <a href="#contact">reach out →</a></p>
+          <div class="about-grid">
+            <div class="about-intro">
+              <div class="eyebrow">About</div>
+              <h1 class="page-h1">A bit about me.</h1>
+              <p class="about-lead">My goal is to give your project an online space that truly represents it: the work, the people, and where you want it all to go.</p>
+              <a href="#contact" class="btn btn-primary about-cta">Start a project</a>
+            </div>
+            <div class="prose">
+              <p>I work solo, so the person you email is the person doing the work. I'll keep you in the loop at every step. Sharing progress, talking through each decision together, and making sure you understand where things stand is the job.</p>
+              <p>And I'll always give you <strong>honest feedback and shape your project's vision</strong>.</p>
+              <p>If that sounds like the kind of help you're after, <a href="#contact">reach out →</a></p>
+            </div>
           </div>
         </div>
       </section>
@@ -424,7 +434,7 @@
     { title:"Riverside Soccer Club", tag:"Sports club", live:true, url:"https://immortalplays.github.io/riverside-soccer-club/", desc:"A bright, mobile-first site with schedules, teams, registration, and parent resources." },
     { title:"AP Calculus AB", tag:"Education", live:true, url:"https://immortalplays.github.io/ap-calc-ab/", desc:"A unit-by-unit study guide with clear concepts and step-by-step worked solutions." },
     { title:"AP Physics 1", tag:"Education", live:true, url:"https://immortalplays.github.io/ap-physics-1/", desc:"An interactive study site with 21 hands-on simulations, worked examples, and practice questions." },
-    { title:"Lightsaber Demo", tag:"Interactive 3D", live:true, url:"https://immortalplays.github.io/lightsaber-demo/", desc:"A playful WebGL toy — ignite, swing, and customize a glowing 3D lightsaber right in the browser." },
+    { title:"Lightsaber Demo", tag:"Interactive 3D", live:true, url:"https://immortalplays.github.io/lightsaber-demo/", desc:"A playful WebGL toy: ignite, swing, and customize a glowing 3D lightsaber right in the browser." },
     { title:"Open Harbor Community Network", tag:"Nonprofit", live:true, url:"https://immortalplays.github.io/open-harbor/", desc:"A warm, donation-focused site for a community nonprofit, with volunteer info and clear ways to get involved." }
   ];
   (function renderWork() {
