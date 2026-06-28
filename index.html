@@ -134,8 +134,8 @@
     border:1.5px solid transparent;
     transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
   }
-  .btn-primary { background:var(--blue); color:#fff; box-shadow:var(--shadow-blue); }
-  .btn-primary:hover { transform:translateY(-2px); background:var(--blue-deep); box-shadow:var(--shadow-blue-hover); }
+  .btn-primary { background:var(--blue); color:#fff; }
+  .btn-primary:hover { transform:translateY(-2px); background:var(--blue-deep); }
   .btn-secondary { background:transparent; color:var(--ink); border-color:rgba(23,24,29,0.22); }
   .btn-secondary:hover { transform:translateY(-2px); border-color:var(--blue); color:var(--blue); }
 
@@ -178,12 +178,12 @@
   .work-foot a, .sub a, .prose a, .contact-foot a { color:var(--blue); font-weight:500; }
 
   /* Prose / About */
-  .about-grid { display:grid; grid-template-columns:0.82fr 1.18fr; gap:60px; align-items:start; }
-  .about-intro .page-h1 { margin:0 0 22px; }
-  .about-lead { color:var(--ink-soft); font-size:1.2rem; line-height:1.6; margin:0; max-width:420px; }
-  .about-cta { margin-top:30px; }
-  .prose { max-width:640px; border-left:2px solid var(--blue); padding-left:28px; }
-  .prose p { color:var(--ink-soft); line-height:1.7; font-size:1.08rem; margin:0 0 22px; }
+  .about-grid { display:grid; grid-template-columns:0.82fr 1.18fr; gap:72px; align-items:start; }
+  .about-intro .page-h1 { margin:0 0 26px; }
+  .about-lead { color:var(--ink-soft); font-size:1.22rem; line-height:1.7; margin:0; max-width:420px; }
+  .about-cta { margin-top:34px; }
+  .prose { max-width:640px; border-left:2px solid var(--blue); padding-left:34px; }
+  .prose p { color:var(--ink-soft); line-height:1.85; font-size:1.1rem; margin:0 0 30px; }
   .prose p strong { color:var(--ink); font-weight:600; }
   .prose p:last-child { margin-bottom:0; }
 
@@ -365,7 +365,7 @@
           <h1 class="page-h1">A few things I've built.</h1>
           <p class="sub" style="margin-top:14px;">Every one is built to load fast, read clearly, and stay easy for its owner to keep current.</p>
           <div class="work-list" id="workList"></div>
-          <p class="work-foot">Live samples open in a new tab. Want something like these? <a href="#contact">Reach out →</a></p>
+          <p class="work-foot">Live samples open in a new tab. Want something like these? <a href="#contact" style="white-space:nowrap;">Reach out&nbsp;→</a></p>
         </div>
       </section>
 
@@ -382,7 +382,7 @@
             <div class="prose">
               <p>I work solo, so the person you email is the person doing the work. I'll keep you in the loop at every step. Sharing progress, talking through each decision together, and making sure you understand where things stand is the job.</p>
               <p>And I'll always give you <strong>honest feedback and shape your project's vision</strong>.</p>
-              <p>If that sounds like the kind of help you're after, <a href="#contact">reach out →</a></p>
+              <p>If that sounds like the kind of help you're after, <a href="#contact" style="white-space:nowrap;">reach out&nbsp;→</a></p>
             </div>
           </div>
         </div>
